@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FlexForm — Modular Inflatable Dockable Shape System</title>
+  <style>
+    :root {
+      --bg: #09111f;
+      --bg2: #0d1830;
+      --panel: rgba(255,255,255,0.08);
+      --panel-strong: rgba(255,255,255,0.12);
+      --text: #eef4ff;
+      --muted: #aab7d1;
+      --line: rgba(255,255,255,0.14);
+      --accent: #7dd3fc;
+      --accent2: #c084fc;
+      --ok: #86efac;
+      --warn: #fde68a;
+      --shadow: 0 20px 60px rgba(0,0,0,0.35);
+      --radius: 22px;
+      --max: 1220px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(125,211,252,.16), transparent 28%),
+        radial-gradient(circle at 85% 10%, rgba(192,132,252,.18), transparent 24%),
+        linear-gradient(180deg, var(--bg), #060b14 70%);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 18px; }
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(14px);
+      background: rgba(8,13,24,.72);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav {
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      padding: 12px 0;
+    }
+    .brand { display:flex; align-items:center; gap:12px; font-weight: 800; letter-spacing:.3px; }
+    .logo {
+      width: 38px; height: 38px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 8px 24px rgba(125,211,252,.35);
+      position: relative;
+      overflow: hidden;
+    }
+    .logo:before, .logo:after {
+      content: ""; position: absolute; inset: 7px; border-radius: 10px; border: 2px solid rgba(255,255,255,.45);
+      transform: rotate(14deg);
+    }
+    .logo:after { inset: 12px; transform: rotate(-18deg); }
+    .navlinks { display:flex; gap: 16px; flex-wrap: wrap; color: var(--muted); font-size: 14px; }
+    .lang-switch { display:flex; gap:8px; flex-wrap: wrap; justify-content: flex-end; }
+    .lang-btn {
+      border: 1px solid var(--line); background: rgba(255,255,255,.05); color: var(--text);
+      padding: 8px 10px; border-radius: 999px; cursor: pointer; font-weight: 700; font-size: 12px;
+    }
+    .lang-btn.active { background: linear-gradient(135deg, rgba(125,211,252,.22), rgba(192,132,252,.24)); border-color: rgba(125,211,252,.45); }
+    .hero {
+      padding: 52px 0 22px;
+      display: grid; grid-template-columns: 1.12fr .88fr; gap: 24px; align-items: stretch;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .hero-copy { padding: 34px; }
+    .eyebrow {
+      display:inline-flex; gap:8px; align-items:center; padding: 7px 12px; border-radius: 999px;
+      border:1px solid rgba(125,211,252,.35); color: var(--accent); background: rgba(125,211,252,.08);
+      font-size: 13px; font-weight: 700;
+    }
+    h1, h2, h3 { margin: 0 0 12px; line-height: 1.08; }
+    h1 { font-size: clamp(34px, 5vw, 70px); letter-spacing: -.03em; }
+    h2 { font-size: clamp(24px, 3vw, 40px); letter-spacing: -.02em; }
+    h3 { font-size: 20px; }
+    p.lead { color: var(--muted); font-size: 18px; margin: 0 0 18px; max-width: 60ch; }
+    .cta-row { display:flex; gap:12px; flex-wrap: wrap; margin-top: 18px; }
+    .btn {
+      padding: 12px 16px; border-radius: 14px; border:1px solid var(--line); cursor:pointer;
+      font-weight: 800; display:inline-flex; align-items:center; gap:10px;
+    }
+    .btn.primary { background: linear-gradient(135deg, rgba(125,211,252,.18), rgba(192,132,252,.18)); border-color: rgba(125,211,252,.35); }
+    .btn.secondary { background: rgba(255,255,255,.04); color: var(--text); }
+    .hero-visual { padding: 22px; display:flex; flex-direction: column; justify-content: center; min-height: 420px; }
+    .scene {
+      position: relative; height: 100%; min-height: 350px; border-radius: 20px; overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(125,211,252,.16), transparent 35%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .shape {
+      position:absolute; backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(255,255,255,.26), rgba(255,255,255,.08));
+      border:1px solid rgba(255,255,255,.2);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 16px 40px rgba(0,0,0,.25);
+    }
+    .cube { width: 140px; height: 140px; border-radius: 28px; left: 56px; bottom: 58px; }
+    .wedge {
+      width: 180px; height: 120px; right: 46px; bottom: 52px; border-radius: 30px;
+      clip-path: polygon(0 100%, 100% 100%, 100% 25%, 0 70%);
+    }
+    .cyl { width: 90px; height: 160px; border-radius: 999px; left: 220px; bottom: 58px; }
+    .panel { width: 210px; height: 38px; border-radius: 20px; left: 114px; bottom: 28px; }
+    .sphere { width: 104px; height: 104px; border-radius: 50%; right: 128px; top: 56px; }
+    .dock {
+      position:absolute; width: 16px; height: 16px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 0 4px rgba(125,211,252,.12), 0 10px 26px rgba(125,211,252,.4);
+    }
+    .dock.d1 { left: 188px; bottom: 112px; }
+    .dock.d2 { left: 314px; bottom: 68px; }
+    .dock.d3 { right: 190px; bottom: 118px; }
+    .metrics { display:grid; grid-template-columns: repeat(3,1fr); gap:12px; margin-top:18px; }
+    .metric { padding: 14px; border-radius: 18px; background: rgba(255,255,255,.05); border:1px solid var(--line); }
+    .metric b { display:block; font-size: 22px; }
+    section { padding: 18px 0; }
+    .section-head { display:flex; align-items:end; justify-content:space-between; gap:20px; margin: 12px 0 18px; }
+    .section-head p { margin:0; color: var(--muted); max-width: 65ch; }
+    .grid-3 { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; }
+    .grid-4 { display:grid; grid-template-columns: repeat(4,1fr); gap:16px; }
+    .tile { padding: 22px; }
+    .icon { font-size: 28px; margin-bottom: 10px; }
+    .muted { color: var(--muted); }
+    .tableish { display:grid; gap:10px; }
+    .row { display:grid; grid-template-columns: 1.1fr .7fr 1.2fr; gap:10px; }
+    .cell {
+      padding: 14px 16px; border:1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,.04);
+    }
+    .proto {
+      display:grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start;
+    }
+    .controls { padding: 22px; }
+    .control { margin-bottom: 18px; }
+    .control label { display:flex; justify-content:space-between; margin-bottom:8px; font-weight:700; }
+    input[type="range"] { width:100%; }
+    .output { padding: 22px; }
+    .pill-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    .pill { padding: 8px 12px; border-radius: 999px; background: rgba(134,239,172,.12); color: var(--ok); border:1px solid rgba(134,239,172,.25); font-weight:700; font-size: 13px; }
+    .pill.warn { color: var(--warn); background: rgba(253,230,138,.1); border-color: rgba(253,230,138,.2); }
+    .roadmap { display:grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+    .step { padding: 22px; position:relative; overflow:hidden; }
+    .step .num {
+      width: 42px; height: 42px; border-radius: 14px; display:grid; place-items:center; font-weight:900;
+      background: linear-gradient(135deg, rgba(125,211,252,.22), rgba(192,132,252,.18));
+      border:1px solid rgba(125,211,252,.35); margin-bottom: 12px;
+    }
+    .faq { display:grid; gap: 12px; }
+    details {
+      background: var(--panel); border:1px solid var(--line); border-radius: 18px; padding: 16px 18px;
+    }
+    summary { cursor:pointer; font-weight: 800; }
+    footer { padding: 28px 0 56px; color: var(--muted); }
+    .footerbox { padding: 22px; display:flex; justify-content:space-between; gap:18px; align-items:center; flex-wrap:wrap; }
+    .tag { display:inline-flex; padding:6px 10px; border-radius:999px; background: rgba(255,255,255,.05); border:1px solid var(--line); font-size: 12px; }
+    @media (max-width: 1080px) {
+      .hero, .proto { grid-template-columns: 1fr; }
+      .grid-4 { grid-template-columns: repeat(2,1fr); }
+      .roadmap { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 760px) {
+      .nav { align-items:flex-start; flex-direction:column; }
+      .hero-copy, .hero-visual, .tile, .controls, .output, .step { padding: 18px; }
+      .grid-3, .grid-4, .roadmap, .row, .metrics { grid-template-columns: 1fr; }
+      .section-head { flex-direction: column; align-items: start; }
+      .navlinks { gap: 10px; font-size: 13px; }
+      .scene { min-height: 300px; }
+      .cube { width: 110px; height: 110px; left: 26px; }
+      .cyl { left: 146px; width: 70px; height: 124px; }
+      .panel { left: 60px; width: 180px; }
+      .wedge { width: 145px; right: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="wrap nav">
+      <div class="brand">
+        <div class="logo"></div>
+        <div>
+          <div id="brandName">FlexForm</div>
+          <div class="muted" id="brandTag" style="font-size:12px; font-weight:600;">Modular Inflatable Dockable Shape System</div>
+        </div>
+      </div>
+      <div class="navlinks">
+        <a href="#overview" data-i="nav_overview">Overview</a>
+        <a href="#system" data-i="nav_system">System</a>
+        <a href="#prototype" data-i="nav_prototype">Prototype</a>
+        <a href="#roadmap" data-i="nav_roadmap">Roadmap</a>
+        <a href="#faq" data-i="nav_faq">FAQ</a>
+      </div>
+      <div class="lang-switch" aria-label="Language switcher">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="es">ES</button>
+        <button class="lang-btn" data-lang="ua">UA</button>
+        <button class="lang-btn" data-lang="fr">FR</button>
+        <button class="lang-btn" data-lang="de">DEU</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <section class="hero" id="overview">
+      <div class="card hero-copy">
+        <div class="eyebrow" data-i="eyebrow">Concept • Product • Prototype</div>
+        <h1 data-i="hero_title">A modular inflatable shape system for interiors, outdoors, art and adaptable living.</h1>
+        <p class="lead" data-i="hero_lead">FlexForm combines soft inflatable geometry, tactile artistic surfaces, and dockable connection points into a compact kit that can become seating, sculptural installations, pop-up workspaces, play objects, event architecture, or temporary shelters.</p>
+        <div class="cta-row">
+          <a class="btn primary" href="#prototype" data-i="btn_prototype">Explore prototype</a>
+          <a class="btn secondary" href="#roadmap" data-i="btn_plan">View development plan</a>
+        </div>
+        <div class="metrics">
+          <div class="metric">
+            <span class="muted" data-i="metric1_label">Core modules</span>
+            <b>5–8</b>
+          </div>
+          <div class="metric">
+            <span class="muted" data-i="metric2_label">Portable kit target</span>
+            <b>5–8 kg</b>
+          </div>
+          <div class="metric">
+            <span class="muted" data-i="metric3_label">Prototype budget</span>
+            <b>$100–150</b>
+          </div>
+        </div>
+      </div>
+      <div class="card hero-visual">
+        <div class="scene" aria-hidden="true">
+          <div class="shape sphere"></div>
+          <div class="shape cube"></div>
+          <div class="shape cyl"></div>
+          <div class="shape panel"></div>
+          <div class="shape wedge"></div>
+          <div class="dock d1"></div>
+          <div class="dock d2"></div>
+          <div class="dock d3"></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2 data-i="sec_value_title">What the product is</h2>
+        </div>
+        <p data-i="sec_value_desc">A soft, portable, reconfigurable object system built from standardized inflatable shapes. It is designed as both a practical product platform and an artistic language of form.</p>
+      </div>
+      <div class="grid-3">
+        <div class="card tile">
+          <div class="icon">🛋️</div>
+          <h3 data-i="value1_title">Interior use</h3>
+          <p class="muted" data-i="value1_desc">Lounge seating, floor systems, flexible desks, reading corners, family play zones, and compact workspace layouts.</p>
+        </div>
+        <div class="card tile">
+          <div class="icon">🏕️</div>
+          <h3 data-i="value2_title">Outdoor use</h3>
+          <p class="muted" data-i="value2_desc">Temporary seating, vanlife modules, festival installations, glamping furniture, shaded social areas, and lightweight mobile setups.</p>
+        </div>
+        <div class="card tile">
+          <div class="icon">🎨</div>
+          <h3 data-i="value3_title">Artistic use</h3>
+          <p class="muted" data-i="value3_desc">Interactive sculpture, gallery objects, modular scenography, tactile environments, branded event spaces, and playful installations.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="system">
+      <div class="section-head">
+        <div>
+          <h2 data-i="sec_system_title">System breakdown</h2>
+        </div>
+        <p data-i="sec_system_desc">The product should be developed as a geometry grammar, not as a single object. That makes the platform extensible, manufacturable, and commercially versatile.</p>
+      </div>
+      <div class="grid-4">
+        <div class="card tile">
+          <h3 data-i="shape_title">Base shapes</h3>
+          <p class="muted" data-i="shape_desc">Cube, cylinder, wedge, flat panel, sphere, and half-dome. These cover seating, support, surfaces, transitions, and decorative volume.</p>
+        </div>
+        <div class="card tile">
+          <h3 data-i="dock_title">Docking methods</h3>
+          <p class="muted" data-i="dock_desc">Magnetic alignment, strap loops, hard click connectors, and optional rail-based structural attachment for larger installations.</p>
+        </div>
+        <div class="card tile">
+          <h3 data-i="materials_title">Materials</h3>
+          <p class="muted" data-i="materials_desc">TPU laminated fabric, PVC tarpaulin, ripstop nylon, and drop-stitch panels depending on softness, rigidity, durability, and target market.</p>
+        </div>
+        <div class="card tile">
+          <h3 data-i="surface_title">Surface identity</h3>
+          <p class="muted" data-i="surface_desc">Matte monochrome, transparent skins, printed graphics, glow elements, stitched textures, or integrated lighting for premium editions.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2 data-i="sec_modules_title">Recommended first prototype kit</h2>
+        </div>
+        <p data-i="sec_modules_desc">Start small. A test kit of 6–8 modules is enough to evaluate comfort, assembly logic, connector strength, and spatial versatility.</p>
+      </div>
+      <div class="card tile tableish">
+        <div class="row">
+          <div class="cell"><strong data-i="mod1_name">Cube</strong><br><span class="muted">60 × 60 × 60 cm</span></div>
+          <div class="cell"><strong data-i="mod1_qty">2–4 units</strong></div>
+          <div class="cell"><span data-i="mod1_use">Seat, base block, side table, stackable structural module.</span></div>
+        </div>
+        <div class="row">
+          <div class="cell"><strong data-i="mod2_name">Cylinder</strong><br><span class="muted">60 × Ø30 cm</span></div>
+          <div class="cell"><strong data-i="mod2_qty">2 units</strong></div>
+          <div class="cell"><span data-i="mod2_use">Support element, armrest, visual connector, leg substitute.</span></div>
+        </div>
+        <div class="row">
+          <div class="cell"><strong data-i="mod3_name">Wedge</strong><br><span class="muted">60 × 60 × 30 cm</span></div>
+          <div class="cell"><strong data-i="mod3_qty">1–2 units</strong></div>
+          <div class="cell"><span data-i="mod3_use">Backrest, ramp, recline angle, form transition.</span></div>
+        </div>
+        <div class="row">
+          <div class="cell"><strong data-i="mod4_name">Flat panel</strong><br><span class="muted">120 × 60 × 10 cm</span></div>
+          <div class="cell"><strong data-i="mod4_qty">1–2 units</strong></div>
+          <div class="cell"><span data-i="mod4_use">Desk top, floor bridge, bench surface, display platform.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="prototype">
+      <div class="section-head">
+        <div>
+          <h2 data-i="sec_proto_title">Interactive prototype estimator</h2>
+        </div>
+        <p data-i="sec_proto_desc">Adjust the number of modules to sketch a small personal system. The estimator summarizes likely use cases, transportability, and prototype scale.</p>
+      </div>
+      <div class="proto">
+        <div class="card controls">
+          <div class="control">
+            <label><span data-i="ctl_cube">Cube modules</span><span id="cubeVal">3</span></label>
+            <input id="cube" type="range" min="0" max="8" value="3" />
+          </div>
+          <div class="control">
+            <label><span data-i="ctl_cyl">Cylinder modules</span><span id="cylVal">2</span></label>
+            <input id="cyl" type="range" min="0" max="6" value="2" />
+          </div>
+          <div class="control">
+            <label><span data-i="ctl_wedge">Wedge modules</span><span id="wedgeVal">1</span></label>
+            <input id="wedge" type="range" min="0" max="4" value="1" />
+          </div>
+          <div class="control">
+            <label><span data-i="ctl_panel">Panel modules</span><span id="panelVal">1</span></label>
+            <input id="panel" type="range" min="0" max="4" value="1" />
+          </div>
+        </div>
+        <div class="card output">
+          <h3 data-i="out_title">Prototype summary</h3>
+          <p class="muted" id="summaryText"></p>
+          <div class="pill-row" id="usePills"></div>
+          <div style="margin-top:18px">
+            <strong data-i="out_budget">Estimated DIY budget:</strong>
+            <span id="budgetText"></span>
+          </div>
+          <div style="margin-top:8px">
+            <strong data-i="out_weight">Portable kit weight:</strong>
+            <span id="weightText"></span>
+          </div>
+          <div style="margin-top:8px">
+            <strong data-i="out_level">Prototype maturity:</strong>
+            <span id="levelText"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2 data-i="sec_materials_title">Materials and construction strategy</h2>
+        </div>
+        <p data-i="sec_materials_desc">Choose materials based on the balance between softness, rigidity, weather resistance, manufacturing ease, and price.</p>
+      </div>
+      <div class="grid-4">
+        <div class="card tile">
+          <h3>TPU</h3>
+          <p class="muted" data-i="mat1">Best for premium soft touch, airtight performance, and cleaner aesthetic finishes.</p>
+        </div>
+        <div class="card tile">
+          <h3>PVC</h3>
+          <p class="muted" data-i="mat2">Lower-cost and durable, suitable for rugged outdoor prototypes and early manufacturing tests.</p>
+        </div>
+        <div class="card tile">
+          <h3>Drop-stitch</h3>
+          <p class="muted" data-i="mat3">Useful where a flatter, more rigid inflated surface is needed, especially panels and desktops.</p>
+        </div>
+        <div class="card tile">
+          <h3 data-i="mat4_title">Connectors</h3>
+          <p class="muted" data-i="mat4">Begin with loops, Velcro straps, embedded magnets, and 3D-printed PETG hard docks on reinforced patches.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap">
+      <div class="section-head">
+        <div>
+          <h2 data-i="sec_roadmap_title">Product development roadmap</h2>
+        </div>
+        <p data-i="sec_roadmap_desc">The fastest path is to validate geometry and connectors first, then evolve into manufacturing, product families, and brand identity.</p>
+      </div>
+      <div class="roadmap">
+        <div class="card step">
+          <div class="num">1</div>
+          <h3 data-i="step1_title">Define geometry standard</h3>
+          <p class="muted" data-i="step1_desc">Freeze dimensions, connection zones, valve placement, and stacking logic for the first 4 module types.</p>
+        </div>
+        <div class="card step">
+          <div class="num">2</div>
+          <h3 data-i="step2_title">Build rough prototypes</h3>
+          <p class="muted" data-i="step2_desc">Test air retention, tactile feel, seam durability, and whether modules remain stable during real use.</p>
+        </div>
+        <div class="card step">
+          <div class="num">3</div>
+          <h3 data-i="step3_title">Pilot use scenarios</h3>
+          <p class="muted" data-i="step3_desc">Validate home lounge, outdoor kit, event installation, and kids/family use as separate product directions.</p>
+        </div>
+        <div class="card step">
+          <div class="num">4</div>
+          <h3 data-i="step4_title">Small-batch production</h3>
+          <p class="muted" data-i="step4_desc">Move to improved materials, branded skins, packaging, and a premium visual identity for launch-ready units.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2 data-i="sec_business_title">Commercial positioning</h2>
+        </div>
+        <p data-i="sec_business_desc">This concept can become a product family rather than a single SKU, which improves market reach and long-term brand value.</p>
+      </div>
+      <div class="grid-3">
+        <div class="card tile">
+          <h3 data-i="biz1_title">Home creative kit</h3>
+          <p class="muted" data-i="biz1_desc">Family interiors, playful lounge spaces, compact seating, and visual design accessories.</p>
+        </div>
+        <div class="card tile">
+          <h3 data-i="biz2_title">Event / gallery kit</h3>
+          <p class="muted" data-i="biz2_desc">Installations, branded pop-ups, exhibitions, stage objects, and interactive sculptural environments.</p>
+        </div>
+        <div class="card tile">
+          <h3 data-i="biz3_title">Outdoor / vanlife kit</h3>
+          <p class="muted" data-i="biz3_desc">Portable comfort modules, adaptable workspace elements, camp furniture, and temporary social zones.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="section-head">
+        <div>
+          <h2 data-i="sec_faq_title">Key questions to answer during prototyping</h2>
+        </div>
+        <p data-i="sec_faq_desc">The best early-stage prototype is the one that reveals what fails, what delights people, and what deserves standardization.</p>
+      </div>
+      <div class="faq">
+        <details open>
+          <summary data-i="faq1_q">How rigid should the modules feel?</summary>
+          <p class="muted" data-i="faq1_a">Soft enough to feel inviting, but stable enough to sit on, stack, and dock without collapsing into unusable forms.</p>
+        </details>
+        <details>
+          <summary data-i="faq2_q">Which connector should come first?</summary>
+          <p class="muted" data-i="faq2_a">Straps and loops are the fastest prototype path. Magnets improve ease of use. Hard click docks become valuable once geometry is fixed.</p>
+        </details>
+        <details>
+          <summary data-i="faq3_q">What is the first commercial story?</summary>
+          <p class="muted" data-i="faq3_a">A compact personal creative kit is the most understandable launch product, with event and gallery editions following later.</p>
+        </details>
+        <details>
+          <summary data-i="faq4_q">What makes this defensible?</summary>
+          <p class="muted" data-i="faq4_a">A recognizable geometry system, signature connector logic, branded material finishes, and a clear visual identity across use cases.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="card footerbox">
+        <div>
+          <strong data-i="footer_title">FlexForm concept page</strong><br />
+          <span class="muted" data-i="footer_desc">Single-file multilingual concept website for product definition, prototyping, and early-stage planning.</span>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <span class="tag">EN</span>
+          <span class="tag">ES</span>
+          <span class="tag">UA</span>
+          <span class="tag">FR</span>
+          <span class="tag">DEU</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const dict = {
+      en: {
+        nav_overview: 'Overview', nav_system: 'System', nav_prototype: 'Prototype', nav_roadmap: 'Roadmap', nav_faq: 'FAQ',
+        eyebrow: 'Concept • Product • Prototype',
+        hero_title: 'A modular inflatable shape system for interiors, outdoors, art and adaptable living.',
+        hero_lead: 'FlexForm combines soft inflatable geometry, tactile artistic surfaces, and dockable connection points into a compact kit that can become seating, sculptural installations, pop-up workspaces, play objects, event architecture, or temporary shelters.',
+        btn_prototype: 'Explore prototype', btn_plan: 'View development plan',
+        metric1_label: 'Core modules', metric2_label: 'Portable kit target', metric3_label: 'Prototype budget',
+        sec_value_title: 'What the product is', sec_value_desc: 'A soft, portable, reconfigurable object system built from standardized inflatable shapes. It is designed as both a practical product platform and an artistic language of form.',
+        value1_title: 'Interior use', value1_desc: 'Lounge seating, floor systems, flexible desks, reading corners, family play zones, and compact workspace layouts.',
+        value2_title: 'Outdoor use', value2_desc: 'Temporary seating, vanlife modules, festival installations, glamping furniture, shaded social areas, and lightweight mobile setups.',
+        value3_title: 'Artistic use', value3_desc: 'Interactive sculpture, gallery objects, modular scenography, tactile environments, branded event spaces, and playful installations.',
+        sec_system_title: 'System breakdown', sec_system_desc: 'The product should be developed as a geometry grammar, not as a single object. That makes the platform extensible, manufacturable, and commercially versatile.',
+        shape_title: 'Base shapes', shape_desc: 'Cube, cylinder, wedge, flat panel, sphere, and half-dome. These cover seating, support, surfaces, transitions, and decorative volume.',
+        dock_title: 'Docking methods', dock_desc: 'Magnetic alignment, strap loops, hard click connectors, and optional rail-based structural attachment for larger installations.',
+        materials_title: 'Materials', materials_desc: 'TPU laminated fabric, PVC tarpaulin, ripstop nylon, and drop-stitch panels depending on softness, rigidity, durability, and target market.',
+        surface_title: 'Surface identity', surface_desc: 'Matte monochrome, transparent skins, printed graphics, glow elements, stitched textures, or integrated lighting for premium editions.',
+        sec_modules_title: 'Recommended first prototype kit', sec_modules_desc: 'Start small. A test kit of 6–8 modules is enough to evaluate comfort, assembly logic, connector strength, and spatial versatility.',
+        mod1_name: 'Cube', mod1_qty: '2–4 units', mod1_use: 'Seat, base block, side table, stackable structural module.',
+        mod2_name: 'Cylinder', mod2_qty: '2 units', mod2_use: 'Support element, armrest, visual connector, leg substitute.',
+        mod3_name: 'Wedge', mod3_qty: '1–2 units', mod3_use: 'Backrest, ramp, recline angle, form transition.',
+        mod4_name: 'Flat panel', mod4_qty: '1–2 units', mod4_use: 'Desk top, floor bridge, bench surface, display platform.',
+        sec_proto_title: 'Interactive prototype estimator', sec_proto_desc: 'Adjust the number of modules to sketch a small personal system. The estimator summarizes likely use cases, transportability, and prototype scale.',
+        ctl_cube: 'Cube modules', ctl_cyl: 'Cylinder modules', ctl_wedge: 'Wedge modules', ctl_panel: 'Panel modules',
+        out_title: 'Prototype summary', out_budget: 'Estimated DIY budget:', out_weight: 'Portable kit weight:', out_level: 'Prototype maturity:',
+        sec_materials_title: 'Materials and construction strategy', sec_materials_desc: 'Choose materials based on the balance between softness, rigidity, weather resistance, manufacturing ease, and price.',
+        mat1: 'Best for premium soft touch, airtight performance, and cleaner aesthetic finishes.',
+        mat2: 'Lower-cost and durable, suitable for rugged outdoor prototypes and early manufacturing tests.',
+        mat3: 'Useful where a flatter, more rigid inflated surface is needed, especially panels and desktops.',
+        mat4_title: 'Connectors', mat4: 'Begin with loops, Velcro straps, embedded magnets, and 3D-printed PETG hard docks on reinforced patches.',
+        sec_roadmap_title: 'Product development roadmap', sec_roadmap_desc: 'The fastest path is to validate geometry and connectors first, then evolve into manufacturing, product families, and brand identity.',
+        step1_title: 'Define geometry standard', step1_desc: 'Freeze dimensions, connection zones, valve placement, and stacking logic for the first 4 module types.',
+        step2_title: 'Build rough prototypes', step2_desc: 'Test air retention, tactile feel, seam durability, and whether modules remain stable during real use.',
+        step3_title: 'Pilot use scenarios', step3_desc: 'Validate home lounge, outdoor kit, event installation, and kids/family use as separate product directions.',
+        step4_title: 'Small-batch production', step4_desc: 'Move to improved materials, branded skins, packaging, and a premium visual identity for launch-ready units.',
+        sec_business_title: 'Commercial positioning', sec_business_desc: 'This concept can become a product family rather than a single SKU, which improves market reach and long-term brand value.',
+        biz1_title: 'Home creative kit', biz1_desc: 'Family interiors, playful lounge spaces, compact seating, and visual design accessories.',
+        biz2_title: 'Event / gallery kit', biz2_desc: 'Installations, branded pop-ups, exhibitions, stage objects, and interactive sculptural environments.',
+        biz3_title: 'Outdoor / vanlife kit', biz3_desc: 'Portable comfort modules, adaptable workspace elements, camp furniture, and temporary social zones.',
+        sec_faq_title: 'Key questions to answer during prototyping', sec_faq_desc: 'The best early-stage prototype is the one that reveals what fails, what delights people, and what deserves standardization.',
+        faq1_q: 'How rigid should the modules feel?', faq1_a: 'Soft enough to feel inviting, but stable enough to sit on, stack, and dock without collapsing into unusable forms.',
+        faq2_q: 'Which connector should come first?', faq2_a: 'Straps and loops are the fastest prototype path. Magnets improve ease of use. Hard click docks become valuable once geometry is fixed.',
+        faq3_q: 'What is the first commercial story?', faq3_a: 'A compact personal creative kit is the most understandable launch product, with event and gallery editions following later.',
+        faq4_q: 'What makes this defensible?', faq4_a: 'A recognizable geometry system, signature connector logic, branded material finishes, and a clear visual identity across use cases.',
+        footer_title: 'FlexForm concept page', footer_desc: 'Single-file multilingual concept website for product definition, prototyping, and early-stage planning.'
+      },
+      es: {
+        nav_overview: 'Resumen', nav_system: 'Sistema', nav_prototype: 'Prototipo', nav_roadmap: 'Plan', nav_faq: 'FAQ',
+        eyebrow: 'Concepto • Producto • Prototipo',
+        hero_title: 'Un sistema modular inflable de formas para interiores, exterior, arte y vida adaptable.',
+        hero_lead: 'FlexForm combina geometría inflable suave, superficies artísticas táctiles y puntos de acople para crear un kit compacto que puede transformarse en asientos, instalaciones escultóricas, espacios de trabajo temporales, objetos lúdicos, arquitectura efímera o refugios temporales.',
+        btn_prototype: 'Explorar prototipo', btn_plan: 'Ver plan de desarrollo', metric1_label: 'Módulos base', metric2_label: 'Objetivo de portabilidad', metric3_label: 'Presupuesto prototipo',
+        sec_value_title: 'Qué es el producto', sec_value_desc: 'Un sistema de objetos suave, portátil y reconfigurable construido con formas inflables estandarizadas. Está pensado tanto como plataforma práctica de producto como lenguaje artístico de formas.',
+        value1_title: 'Uso interior', value1_desc: 'Asientos lounge, sistemas de suelo, escritorios flexibles, rincones de lectura, zonas familiares de juego y espacios compactos de trabajo.',
+        value2_title: 'Uso exterior', value2_desc: 'Asientos temporales, módulos para vanlife, instalaciones de festival, mobiliario glamping, áreas sociales con sombra y configuraciones móviles ligeras.',
+        value3_title: 'Uso artístico', value3_desc: 'Escultura interactiva, objetos de galería, escenografía modular, entornos táctiles, espacios de marca y montajes lúdicos.',
+        sec_system_title: 'Desglose del sistema', sec_system_desc: 'El producto debe desarrollarse como una gramática geométrica, no como un objeto único. Eso vuelve la plataforma extensible, fabricable y comercialmente versátil.',
+        shape_title: 'Formas base', shape_desc: 'Cubo, cilindro, cuña, panel plano, esfera y media cúpula. Cubren asiento, soporte, superficies, transiciones y volumen decorativo.',
+        dock_title: 'Métodos de acople', dock_desc: 'Alineación magnética, bucles con correas, conectores de clic rígidos y fijación opcional sobre riel para instalaciones mayores.',
+        materials_title: 'Materiales', materials_desc: 'Tejido laminado TPU, lona PVC, nailon ripstop y paneles drop-stitch según suavidad, rigidez, durabilidad y mercado objetivo.',
+        surface_title: 'Identidad superficial', surface_desc: 'Monocromo mate, pieles transparentes, gráficos impresos, elementos luminosos, texturas cosidas o iluminación integrada para ediciones premium.',
+        sec_modules_title: 'Primer kit de prototipo recomendado', sec_modules_desc: 'Empieza pequeño. Un kit de 6–8 módulos basta para evaluar confort, lógica de montaje, fuerza de conexión y versatilidad espacial.',
+        mod1_name: 'Cubo', mod1_qty: '2–4 unidades', mod1_use: 'Asiento, bloque base, mesa auxiliar y módulo estructural apilable.',
+        mod2_name: 'Cilindro', mod2_qty: '2 unidades', mod2_use: 'Elemento de soporte, reposabrazos, conector visual o sustituto de pata.',
+        mod3_name: 'Cuña', mod3_qty: '1–2 unidades', mod3_use: 'Respaldo, rampa, ángulo de reclinación y transición formal.',
+        mod4_name: 'Panel plano', mod4_qty: '1–2 unidades', mod4_use: 'Tablero de escritorio, puente de suelo, banco o plataforma de exposición.',
+        sec_proto_title: 'Estimador interactivo del prototipo', sec_proto_desc: 'Ajusta el número de módulos para esbozar un sistema personal pequeño. El estimador resume usos probables, transportabilidad y escala del prototipo.',
+        ctl_cube: 'Módulos cubo', ctl_cyl: 'Módulos cilindro', ctl_wedge: 'Módulos cuña', ctl_panel: 'Módulos panel',
+        out_title: 'Resumen del prototipo', out_budget: 'Presupuesto DIY estimado:', out_weight: 'Peso del kit portátil:', out_level: 'Madurez del prototipo:',
+        sec_materials_title: 'Estrategia de materiales y construcción', sec_materials_desc: 'Elegir materiales según el equilibrio entre suavidad, rigidez, resistencia climática, facilidad de fabricación y coste.',
+        mat1: 'Ideal para tacto premium, buen sellado de aire y acabados visuales más limpios.',
+        mat2: 'Más económico y resistente, adecuado para prototipos exteriores robustos y primeras pruebas de fabricación.',
+        mat3: 'Útil cuando se necesita una superficie inflada más plana y rígida, especialmente en paneles y escritorios.',
+        mat4_title: 'Conectores', mat4: 'Empieza con bucles, correas Velcro, imanes integrados y docks rígidos PETG impresos en 3D sobre zonas reforzadas.',
+        sec_roadmap_title: 'Hoja de ruta de desarrollo', sec_roadmap_desc: 'La vía más rápida es validar primero geometría y conectores, y después evolucionar hacia fabricación, familias de producto e identidad de marca.',
+        step1_title: 'Definir estándar geométrico', step1_desc: 'Fijar dimensiones, zonas de conexión, posición de válvulas y lógica de apilado para los primeros 4 tipos de módulos.',
+        step2_title: 'Construir prototipos iniciales', step2_desc: 'Probar retención de aire, tacto, durabilidad de costuras y estabilidad en uso real.',
+        step3_title: 'Pilotos de uso', step3_desc: 'Validar lounge doméstico, kit exterior, instalación para eventos y uso familiar/infantil como direcciones separadas.',
+        step4_title: 'Producción en lotes pequeños', step4_desc: 'Pasar a mejores materiales, pieles de marca, empaques e identidad visual premium para unidades listas para lanzamiento.',
+        sec_business_title: 'Posicionamiento comercial', sec_business_desc: 'Este concepto puede convertirse en una familia de productos y no en un solo SKU, mejorando alcance de mercado y valor de marca a largo plazo.',
+        biz1_title: 'Kit creativo para hogar', biz1_desc: 'Interiores familiares, lounge lúdico, asientos compactos y accesorios visuales de diseño.',
+        biz2_title: 'Kit para eventos / galería', biz2_desc: 'Instalaciones, pop-ups de marca, exposiciones, objetos escénicos y entornos escultóricos interactivos.',
+        biz3_title: 'Kit exterior / vanlife', biz3_desc: 'Módulos portátiles de confort, elementos adaptables de trabajo, mobiliario camp y zonas sociales temporales.',
+        sec_faq_title: 'Preguntas clave del prototipado', sec_faq_desc: 'El mejor prototipo temprano es el que revela qué falla, qué encanta y qué merece estandarización.',
+        faq1_q: '¿Qué rigidez deben tener los módulos?', faq1_a: 'Lo bastante suaves para resultar acogedores, pero lo bastante estables para sentarse, apilar y acoplar sin deformarse de forma inútil.',
+        faq2_q: '¿Qué conector debe venir primero?', faq2_a: 'Correas y bucles son la vía más rápida. Los imanes mejoran la facilidad de uso. Los clics rígidos aportan valor cuando la geometría ya está fijada.',
+        faq3_q: '¿Cuál es la primera historia comercial?', faq3_a: 'Un kit creativo personal y compacto es el producto de lanzamiento más comprensible, seguido por ediciones para eventos y galerías.',
+        faq4_q: '¿Qué hace esto defendible?', faq4_a: 'Un sistema geométrico reconocible, lógica de conexión distintiva, acabados de material propios e identidad visual clara en todos los usos.',
+        footer_title: 'Página conceptual FlexForm', footer_desc: 'Sitio conceptual multilingüe de un solo archivo para definición de producto, prototipado y planificación inicial.'
+      },
+      ua: {
+        nav_overview: 'Огляд', nav_system: 'Система', nav_prototype: 'Прототип', nav_roadmap: 'План', nav_faq: 'FAQ',
+        eyebrow: 'Концепт • Продукт • Прототип',
+        hero_title: 'Модульна надувна система форм для інтер’єру, вулиці, мистецтва та адаптивного життя.',
+        hero_lead: 'FlexForm поєднує м’яку надувну геометрію, тактильні художні поверхні та точки стикування у компактний набір, який може перетворюватися на сидіння, скульптурні інсталяції, тимчасові робочі зони, ігрові об’єкти, подієву архітектуру або тимчасові укриття.',
+        btn_prototype: 'Дослідити прототип', btn_plan: 'Переглянути план розробки', metric1_label: 'Базові модулі', metric2_label: 'Ціль портативності', metric3_label: 'Бюджет прототипу',
+        sec_value_title: 'Що це за продукт', sec_value_desc: 'М’яка, портативна та переналаштовувана система об’єктів, створена зі стандартизованих надувних форм. Вона задумана і як практична продуктова платформа, і як художня мова форми.',
+        value1_title: 'Для інтер’єру', value1_desc: 'Лаунж-сидіння, підлогові системи, гнучкі столи, куточки для читання, сімейні ігрові зони та компактні робочі простори.',
+        value2_title: 'Для вулиці', value2_desc: 'Тимчасові сидіння, vanlife-модулі, фестивальні інсталяції, глемпінг-меблі, затінені соціальні зони та легкі мобільні конфігурації.',
+        value3_title: 'Для мистецтва', value3_desc: 'Інтерактивна скульптура, галерейні об’єкти, модульна сценографія, тактильні середовища, брендовані простори та ігрові інсталяції.',
+        sec_system_title: 'Структура системи', sec_system_desc: 'Продукт слід розвивати як геометричну граматику, а не як один об’єкт. Це робить платформу масштабованою, виробничо зручною та комерційно гнучкою.',
+        shape_title: 'Базові форми', shape_desc: 'Куб, циліндр, клин, плоска панель, сфера та напівкупол. Вони покривають сидіння, опору, поверхні, переходи та декоративний об’єм.',
+        dock_title: 'Методи стикування', dock_desc: 'Магнітне вирівнювання, петлі зі стяжками, жорсткі click-конектори та додаткове рейкове кріплення для більших інсталяцій.',
+        materials_title: 'Матеріали', materials_desc: 'TPU-ламінована тканина, ПВХ-тент, ripstop-нейлон і drop-stitch панелі залежно від м’якості, жорсткості, довговічності та цільового ринку.',
+        surface_title: 'Поверхнева ідентичність', surface_desc: 'Матовий монохром, прозорі оболонки, друковані графіки, світлові елементи, прошиті текстури або інтегроване освітлення для преміум-версій.',
+        sec_modules_title: 'Рекомендований перший набір прототипу', sec_modules_desc: 'Починайте з малого. Набору з 6–8 модулів достатньо, щоб оцінити комфорт, логіку складання, міцність з’єднань і просторову гнучкість.',
+        mod1_name: 'Куб', mod1_qty: '2–4 модулі', mod1_use: 'Сидіння, базовий блок, приставний столик, штабельований структурний модуль.',
+        mod2_name: 'Циліндр', mod2_qty: '2 модулі', mod2_use: 'Опора, підлокітник, візуальний конектор або заміна ніжки.',
+        mod3_name: 'Клин', mod3_qty: '1–2 модулі', mod3_use: 'Спинка, рампа, кут нахилу, перехід форми.',
+        mod4_name: 'Плоска панель', mod4_qty: '1–2 модулі', mod4_use: 'Стільниця, місток на підлозі, лавка або виставкова платформа.',
+        sec_proto_title: 'Інтерактивний оцінювач прототипу', sec_proto_desc: 'Налаштуйте кількість модулів, щоб змоделювати невелику персональну систему. Оцінювач підсумує сценарії використання, портативність і масштаб прототипу.',
+        ctl_cube: 'Модулі куба', ctl_cyl: 'Модулі циліндра', ctl_wedge: 'Модулі клина', ctl_panel: 'Модулі панелі',
+        out_title: 'Підсумок прототипу', out_budget: 'Орієнтовний DIY бюджет:', out_weight: 'Вага портативного набору:', out_level: 'Зрілість прототипу:',
+        sec_materials_title: 'Стратегія матеріалів і конструкції', sec_materials_desc: 'Матеріали слід обирати за балансом м’якості, жорсткості, стійкості до погоди, простоти виробництва та вартості.',
+        mat1: 'Найкраще для преміального м’якого дотику, герметичності та чистішої естетики.',
+        mat2: 'Дешевший і витривалий варіант для грубих вуличних прототипів і перших виробничих тестів.',
+        mat3: 'Корисний там, де потрібна більш пласка й жорстка надувна поверхня, особливо для панелей і столів.',
+        mat4_title: 'Конектори', mat4: 'Починайте з петель, липучок, вбудованих магнітів і 3D-друкованих жорстких PETG-конекторів на підсилених ділянках.',
+        sec_roadmap_title: 'Дорожня карта розробки', sec_roadmap_desc: 'Найшвидший шлях — спочатку перевірити геометрію та конектори, а потім перейти до виробництва, продуктових сімейств і бренду.',
+        step1_title: 'Задати геометричний стандарт', step1_desc: 'Зафіксувати розміри, зони з’єднання, розташування клапанів і логіку штабелювання для перших 4 типів модулів.',
+        step2_title: 'Створити грубі прототипи', step2_desc: 'Перевірити утримання повітря, тактильність, міцність швів і стабільність модулів у реальному використанні.',
+        step3_title: 'Пілотні сценарії', step3_desc: 'Валідовати домашній лаунж, зовнішній набір, подієву інсталяцію та сімейно-дитячий сценарій як окремі напрями.',
+        step4_title: 'Мале серійне виробництво', step4_desc: 'Перейти до кращих матеріалів, брендованих оболонок, пакування та преміальної візуальної айдентики.',
+        sec_business_title: 'Комерційне позиціонування', sec_business_desc: 'Ця концепція може стати цілим сімейством продуктів, а не одним SKU, що покращує ринкове покриття та довгострокову цінність бренду.',
+        biz1_title: 'Домашній творчий набір', biz1_desc: 'Сімейні інтер’єри, ігровий лаунж, компактні сидіння та дизайнерські візуальні аксесуари.',
+        biz2_title: 'Набір для подій / галерей', biz2_desc: 'Інсталяції, брендовані pop-up простори, виставки, сценічні об’єкти та інтерактивні скульптурні середовища.',
+        biz3_title: 'Набір для вулиці / vanlife', biz3_desc: 'Портативні модулі комфорту, адаптивні елементи робочого місця, кемпінгові меблі та тимчасові соціальні зони.',
+        sec_faq_title: 'Ключові питання під час прототипування', sec_faq_desc: 'Найкращий ранній прототип — той, що показує, що не працює, що подобається людям і що варто стандартизувати.',
+        faq1_q: 'Наскільки жорсткими мають бути модулі?', faq1_a: 'Досить м’якими, щоб бути приємними, але достатньо стабільними, щоб на них сидіти, їх складати та стикувати без втрати функції.',
+        faq2_q: 'Який конектор запускати першим?', faq2_a: 'Петлі та ремені — найшвидший шлях. Магніти покращують зручність. Жорсткі click-конектори стають цінними після фіксації геометрії.',
+        faq3_q: 'Яка перша комерційна історія?', faq3_a: 'Компактний персональний творчий набір — найзрозуміліший стартовий продукт, а далі можна додати версії для подій і галерей.',
+        faq4_q: 'Що робить продукт захищеним?', faq4_a: 'Впізнавана геометрична система, власна логіка стикування, брендовані матеріальні фініші та чітка візуальна айдентика.',
+        footer_title: 'Концепт-сторінка FlexForm', footer_desc: 'Однофайловий багатомовний концепт-сайт для визначення продукту, прототипування та раннього планування.'
+      },
+      fr: {
+        nav_overview: 'Vue d’ensemble', nav_system: 'Système', nav_prototype: 'Prototype', nav_roadmap: 'Feuille de route', nav_faq: 'FAQ',
+        eyebrow: 'Concept • Produit • Prototype',
+        hero_title: 'Un système modulaire gonflable de formes pour l’intérieur, l’extérieur, l’art et les usages adaptables.',
+        hero_lead: 'FlexForm associe une géométrie gonflable souple, des surfaces artistiques tactiles et des points d’ancrage dockables dans un kit compact pouvant devenir des assises, des installations sculpturales, des espaces de travail temporaires, des objets ludiques, de l’architecture événementielle ou des abris temporaires.',
+        btn_prototype: 'Explorer le prototype', btn_plan: 'Voir le plan de développement', metric1_label: 'Modules de base', metric2_label: 'Objectif de portabilité', metric3_label: 'Budget prototype',
+        sec_value_title: 'Ce qu’est le produit', sec_value_desc: 'Un système d’objets souple, portable et reconfigurable construit à partir de formes gonflables standardisées. Il est pensé à la fois comme plateforme produit pratique et comme langage artistique de la forme.',
+        value1_title: 'Usage intérieur', value1_desc: 'Assises lounge, systèmes au sol, bureaux flexibles, coins lecture, zones de jeu familiales et espaces de travail compacts.',
+        value2_title: 'Usage extérieur', value2_desc: 'Assises temporaires, modules vanlife, installations de festival, mobilier glamping, zones sociales ombragées et configurations mobiles légères.',
+        value3_title: 'Usage artistique', value3_desc: 'Sculpture interactive, objets de galerie, scénographie modulaire, environnements tactiles, espaces de marque et installations ludiques.',
+        sec_system_title: 'Décomposition du système', sec_system_desc: 'Le produit doit être développé comme une grammaire géométrique et non comme un objet unique. Cela rend la plateforme extensible, industrialisable et commercialement polyvalente.',
+        shape_title: 'Formes de base', shape_desc: 'Cube, cylindre, coin, panneau plat, sphère et demi-dôme. Ils couvrent l’assise, le support, les surfaces, les transitions et le volume décoratif.',
+        dock_title: 'Méthodes de docking', dock_desc: 'Alignement magnétique, boucles à sangles, connecteurs rigides à clic et fixation structurelle optionnelle sur rail pour les grandes installations.',
+        materials_title: 'Matériaux', materials_desc: 'Tissu laminé TPU, bâche PVC, nylon ripstop et panneaux drop-stitch selon la souplesse, la rigidité, la durabilité et le marché visé.',
+        surface_title: 'Identité de surface', surface_desc: 'Monochrome mat, peaux transparentes, graphismes imprimés, éléments lumineux, textures cousues ou éclairage intégré pour les éditions premium.',
+        sec_modules_title: 'Premier kit prototype recommandé', sec_modules_desc: 'Commencez petit. Un kit de 6 à 8 modules suffit pour évaluer le confort, la logique d’assemblage, la force des connexions et la polyvalence spatiale.',
+        mod1_name: 'Cube', mod1_qty: '2–4 unités', mod1_use: 'Assise, bloc de base, table d’appoint et module structurel empilable.',
+        mod2_name: 'Cylindre', mod2_qty: '2 unités', mod2_use: 'Élément de support, accoudoir, connecteur visuel ou substitut de pied.',
+        mod3_name: 'Coin', mod3_qty: '1–2 unités', mod3_use: 'Dossier, rampe, angle d’inclinaison et transition formelle.',
+        mod4_name: 'Panneau plat', mod4_qty: '1–2 unités', mod4_use: 'Plateau de bureau, pont au sol, surface de banc ou plateforme d’exposition.',
+        sec_proto_title: 'Estimateur interactif de prototype', sec_proto_desc: 'Ajustez le nombre de modules pour esquisser un petit système personnel. L’estimateur résume les usages probables, la portabilité et l’échelle du prototype.',
+        ctl_cube: 'Modules cube', ctl_cyl: 'Modules cylindre', ctl_wedge: 'Modules coin', ctl_panel: 'Modules panneau',
+        out_title: 'Résumé du prototype', out_budget: 'Budget DIY estimé :', out_weight: 'Poids du kit portable :', out_level: 'Maturité du prototype :',
+        sec_materials_title: 'Stratégie matériaux et construction', sec_materials_desc: 'Choisir les matériaux selon l’équilibre entre souplesse, rigidité, résistance météo, facilité de fabrication et coût.',
+        mat1: 'Idéal pour un toucher premium, une bonne étanchéité à l’air et une finition visuelle plus propre.',
+        mat2: 'Moins coûteux et durable, adapté aux prototypes extérieurs robustes et aux premiers essais industriels.',
+        mat3: 'Utile lorsqu’une surface gonflée plus plate et plus rigide est nécessaire, surtout pour les panneaux et plateaux.',
+        mat4_title: 'Connecteurs', mat4: 'Commencer avec boucles, sangles Velcro, aimants intégrés et docks rigides PETG imprimés en 3D sur zones renforcées.',
+        sec_roadmap_title: 'Feuille de route produit', sec_roadmap_desc: 'Le chemin le plus rapide consiste à valider d’abord la géométrie et les connecteurs, puis à évoluer vers l’industrialisation, les familles produit et l’identité de marque.',
+        step1_title: 'Définir le standard géométrique', step1_desc: 'Figer dimensions, zones de connexion, position des valves et logique d’empilage pour les 4 premiers types de modules.',
+        step2_title: 'Construire des prototypes bruts', step2_desc: 'Tester la rétention d’air, le toucher, la durabilité des soudures et la stabilité en usage réel.',
+        step3_title: 'Piloter les scénarios d’usage', step3_desc: 'Valider le lounge domestique, le kit extérieur, l’installation événementielle et l’usage famille/enfants comme axes séparés.',
+        step4_title: 'Petite série', step4_desc: 'Passer à de meilleurs matériaux, peaux brandées, packaging et identité visuelle premium pour des unités prêtes au lancement.',
+        sec_business_title: 'Positionnement commercial', sec_business_desc: 'Ce concept peut devenir une famille de produits plutôt qu’un seul SKU, ce qui améliore la portée marché et la valeur de marque à long terme.',
+        biz1_title: 'Kit créatif maison', biz1_desc: 'Intérieurs familiaux, espaces lounge ludiques, assises compactes et accessoires visuels design.',
+        biz2_title: 'Kit événement / galerie', biz2_desc: 'Installations, pop-ups brandés, expositions, objets de scène et environnements sculpturaux interactifs.',
+        biz3_title: 'Kit extérieur / vanlife', biz3_desc: 'Modules de confort portables, éléments d’espace de travail adaptables, mobilier de camp et zones sociales temporaires.',
+        sec_faq_title: 'Questions clés du prototypage', sec_faq_desc: 'Le meilleur prototype précoce est celui qui révèle ce qui échoue, ce qui séduit les utilisateurs et ce qui mérite d’être standardisé.',
+        faq1_q: 'Quelle rigidité viser ?', faq1_a: 'Assez souple pour être accueillant, mais assez stable pour s’asseoir, empiler et dock-er sans perdre l’usage.',
+        faq2_q: 'Quel connecteur lancer en premier ?', faq2_a: 'Les sangles et boucles sont la voie la plus rapide. Les aimants améliorent l’usage. Les clics rigides deviennent pertinents une fois la géométrie figée.',
+        faq3_q: 'Quelle première histoire commerciale ?', faq3_a: 'Un kit créatif personnel compact est le produit de lancement le plus compréhensible, suivi d’éditions événementielles et galerie.',
+        faq4_q: 'Qu’est-ce qui rend cela défendable ?', faq4_a: 'Un système géométrique identifiable, une logique de connexion signature, des finitions matières distinctives et une identité visuelle claire.',
+        footer_title: 'Page concept FlexForm', footer_desc: 'Site concept multilingue en un seul fichier pour définition produit, prototypage et planification initiale.'
+      },
+      de: {
+        nav_overview: 'Überblick', nav_system: 'System', nav_prototype: 'Prototyp', nav_roadmap: 'Roadmap', nav_faq: 'FAQ',
+        eyebrow: 'Konzept • Produkt • Prototyp',
+        hero_title: 'Ein modulares aufblasbares Formsystem für Innenräume, Außenbereiche, Kunst und anpassbares Wohnen.',
+        hero_lead: 'FlexForm verbindet weiche aufblasbare Geometrie, taktile künstlerische Oberflächen und andockbare Verbindungspunkte zu einem kompakten Kit, das zu Sitzmöbeln, skulpturalen Installationen, temporären Arbeitsbereichen, spielerischen Objekten, Event-Architektur oder temporären Schutzstrukturen werden kann.',
+        btn_prototype: 'Prototyp erkunden', btn_plan: 'Entwicklungsplan ansehen', metric1_label: 'Kernmodule', metric2_label: 'Tragbares Kit-Ziel', metric3_label: 'Prototyp-Budget',
+        sec_value_title: 'Was das Produkt ist', sec_value_desc: 'Ein weiches, tragbares und neu konfigurierbares Objektsystem aus standardisierten aufblasbaren Formen. Es ist sowohl als praktische Produktplattform als auch als künstlerische Formsprache gedacht.',
+        value1_title: 'Innenbereich', value1_desc: 'Lounge-Sitze, Bodensysteme, flexible Schreibtische, Leseecken, Familien-Spielzonen und kompakte Arbeitsplatzlayouts.',
+        value2_title: 'Außenbereich', value2_desc: 'Temporäre Sitzbereiche, Vanlife-Module, Festivalinstallationen, Glamping-Möbel, beschattete Sozialzonen und leichte mobile Setups.',
+        value3_title: 'Künstlerische Nutzung', value3_desc: 'Interaktive Skulpturen, Galerieobjekte, modulare Szenografie, taktile Umgebungen, gebrandete Event-Flächen und spielerische Installationen.',
+        sec_system_title: 'Systemaufbau', sec_system_desc: 'Das Produkt sollte als geometrische Grammatik und nicht als Einzelobjekt entwickelt werden. Das macht die Plattform erweiterbar, produzierbar und kommerziell vielseitig.',
+        shape_title: 'Grundformen', shape_desc: 'Würfel, Zylinder, Keil, Flachpanel, Kugel und Halbkuppe. Sie decken Sitzen, Stützen, Flächen, Übergänge und dekoratives Volumen ab.',
+        dock_title: 'Docking-Methoden', dock_desc: 'Magnetische Ausrichtung, Schlaufen mit Gurten, harte Klickverbinder und optional schienenbasierte Strukturaufnahme für größere Installationen.',
+        materials_title: 'Materialien', materials_desc: 'TPU-laminiertes Gewebe, PVC-Plane, Ripstop-Nylon und Drop-Stitch-Panels je nach Weichheit, Steifigkeit, Haltbarkeit und Zielmarkt.',
+        surface_title: 'Oberflächenidentität', surface_desc: 'Mattes Monochrom, transparente Hüllen, gedruckte Grafiken, Leuchtelemente, genähte Texturen oder integriertes Licht für Premium-Editionen.',
+        sec_modules_title: 'Empfohlenes erstes Prototyp-Kit', sec_modules_desc: 'Klein anfangen. Ein Testkit mit 6–8 Modulen reicht aus, um Komfort, Montage-Logik, Verbindungsstärke und räumliche Vielseitigkeit zu prüfen.',
+        mod1_name: 'Würfel', mod1_qty: '2–4 Einheiten', mod1_use: 'Sitz, Basisblock, Beistelltisch und stapelbares Strukturmodul.',
+        mod2_name: 'Zylinder', mod2_qty: '2 Einheiten', mod2_use: 'Stützelement, Armlehne, visueller Verbinder oder Bein-Ersatz.',
+        mod3_name: 'Keil', mod3_qty: '1–2 Einheiten', mod3_use: 'Rückenlehne, Rampe, Neigungswinkel und Formübergang.',
+        mod4_name: 'Flachpanel', mod4_qty: '1–2 Einheiten', mod4_use: 'Tischplatte, Bodenbrücke, Bankfläche oder Displayplattform.',
+        sec_proto_title: 'Interaktiver Prototyp-Schätzer', sec_proto_desc: 'Passen Sie die Modulanzahl an, um ein kleines persönliches System zu skizzieren. Der Schätzer fasst mögliche Nutzungen, Transportierbarkeit und Prototyp-Größe zusammen.',
+        ctl_cube: 'Würfelmodule', ctl_cyl: 'Zylindermodule', ctl_wedge: 'Keilmodule', ctl_panel: 'Panelmodule',
+        out_title: 'Prototyp-Zusammenfassung', out_budget: 'Geschätztes DIY-Budget:', out_weight: 'Gewicht des tragbaren Kits:', out_level: 'Prototyp-Reifegrad:',
+        sec_materials_title: 'Material- und Konstruktionsstrategie', sec_materials_desc: 'Materialien sollten nach dem Gleichgewicht zwischen Weichheit, Steifigkeit, Wetterbeständigkeit, Fertigungsaufwand und Preis gewählt werden.',
+        mat1: 'Am besten für Premium-Haptik, gute Luftdichtigkeit und sauberere ästhetische Oberflächen.',
+        mat2: 'Kostengünstiger und robust, geeignet für raue Outdoor-Prototypen und frühe Produktionstests.',
+        mat3: 'Sinnvoll dort, wo eine flachere und steifere aufgeblasene Fläche nötig ist, besonders bei Panels und Tischflächen.',
+        mat4_title: 'Verbinder', mat4: 'Start mit Schlaufen, Klettgurten, eingebetteten Magneten und 3D-gedruckten PETG-Hartdocks auf verstärkten Zonen.',
+        sec_roadmap_title: 'Produktentwicklungs-Roadmap', sec_roadmap_desc: 'Der schnellste Weg ist, zuerst Geometrie und Verbinder zu validieren und dann in Fertigung, Produktfamilien und Markenidentität überzugehen.',
+        step1_title: 'Geometriestandard definieren', step1_desc: 'Abmessungen, Verbindungszonen, Ventilpositionen und Stapellogik für die ersten 4 Modultypen festlegen.',
+        step2_title: 'Rohprototypen bauen', step2_desc: 'Luftdichtigkeit, Haptik, Nahtfestigkeit und Stabilität im realen Einsatz testen.',
+        step3_title: 'Nutzungsszenarien pilotieren', step3_desc: 'Home-Lounge, Outdoor-Kit, Event-Installation und Familien-/Kinder-Nutzung als getrennte Richtungen validieren.',
+        step4_title: 'Kleinserienproduktion', step4_desc: 'Auf bessere Materialien, gebrandete Hüllen, Verpackung und Premium-Visuelle Identität für launchfähige Einheiten umstellen.',
+        sec_business_title: 'Kommerzielle Positionierung', sec_business_desc: 'Dieses Konzept kann zu einer Produktfamilie statt zu einem einzelnen SKU werden und damit Marktbreite und langfristigen Markenwert erhöhen.',
+        biz1_title: 'Home-Creative-Kit', biz1_desc: 'Familieninterieurs, spielerische Lounge-Bereiche, kompakte Sitzmöbel und visuelle Design-Accessoires.',
+        biz2_title: 'Event-/Galerie-Kit', biz2_desc: 'Installationen, gebrandete Pop-ups, Ausstellungen, Bühnenobjekte und interaktive skulpturale Umgebungen.',
+        biz3_title: 'Outdoor-/Vanlife-Kit', biz3_desc: 'Tragbare Komfortmodule, anpassbare Workspace-Elemente, Camp-Möbel und temporäre soziale Zonen.',
+        sec_faq_title: 'Wichtige Fragen im Prototyping', sec_faq_desc: 'Der beste frühe Prototyp ist derjenige, der zeigt, was scheitert, was Menschen begeistert und was standardisiert werden sollte.',
+        faq1_q: 'Wie steif sollen die Module sein?', faq1_a: 'Weich genug, um einladend zu wirken, aber stabil genug zum Sitzen, Stapeln und Andocken ohne Funktionsverlust.',
+        faq2_q: 'Welcher Verbinder zuerst?', faq2_a: 'Gurte und Schlaufen sind der schnellste Prototyp-Weg. Magnete verbessern die Bedienung. Harte Klickverbinder lohnen sich, sobald die Geometrie fixiert ist.',
+        faq3_q: 'Was ist die erste kommerzielle Story?', faq3_a: 'Ein kompaktes persönliches Creative-Kit ist das verständlichste Launch-Produkt, gefolgt von Event- und Galerie-Editionen.',
+        faq4_q: 'Was macht das verteidigbar?', faq4_a: 'Ein wiedererkennbares Geometriesystem, eine charakteristische Verbindungslogik, markante Materialoberflächen und eine klare visuelle Identität.',
+        footer_title: 'FlexForm Konzeptseite', footer_desc: 'Mehrsprachige Konzept-Website in einer Datei für Produktdefinition, Prototyping und frühe Planung.'
+      }
+    };
+
+    let lang = 'en';
+    const t = (key) => (dict[lang] && dict[lang][key]) || dict.en[key] || key;
+
+    function applyLang() {
+      document.documentElement.lang = lang === 'de' ? 'de' : lang;
+      document.querySelectorAll('[data-i]').forEach(el => {
+        const key = el.getAttribute('data-i');
+        el.textContent = t(key);
+      });
+      document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.lang === lang));
+      updateEstimator();
+    }
+
+    const sliders = ['cube', 'cyl', 'wedge', 'panel'];
+    sliders.forEach(id => {
+      const input = document.getElementById(id);
+      const val = document.getElementById(id + 'Val');
+      input.addEventListener('input', () => { val.textContent = input.value; updateEstimator(); });
+    });
+
+    function updateEstimator() {
+      const c = +document.getElementById('cube').value;
+      const y = +document.getElementById('cyl').value;
+      const w = +document.getElementById('wedge').value;
+      const p = +document.getElementById('panel').value;
+      const total = c + y + w + p;
+      const budget = Math.round(c * 18 + y * 14 + w * 16 + p * 20 + 35);
+      const weight = (c * 0.8 + y * 0.6 + w * 0.7 + p * 1.0 + 1.2).toFixed(1);
+
+      let level = 'micro concept';
+      if (total >= 6) level = 'functional prototype';
+      if (total >= 9) level = 'experience kit';
+      if (total >= 12) level = 'pilot collection';
+
+      const levelMap = {
+        en: { 'micro concept':'micro concept', 'functional prototype':'functional prototype', 'experience kit':'experience kit', 'pilot collection':'pilot collection' },
+        es: { 'micro concept':'micro concepto', 'functional prototype':'prototipo funcional', 'experience kit':'kit experiencial', 'pilot collection':'colección piloto' },
+        ua: { 'micro concept':'мікроконцепт', 'functional prototype':'функціональний прототип', 'experience kit':'дослідний набір', 'pilot collection':'пілотна колекція' },
+        fr: { 'micro concept':'micro concept', 'functional prototype':'prototype fonctionnel', 'experience kit':'kit expérientiel', 'pilot collection':'collection pilote' },
+        de: { 'micro concept':'Mikrokonzept', 'functional prototype':'funktionsfähiger Prototyp', 'experience kit':'Erlebnis-Kit', 'pilot collection':'Pilotkollektion' }
+      };
+
+      const summary = {
+        en: `This configuration includes ${total} modules and is suitable for testing seating, form transitions, quick assembly, and small-space adaptation.` ,
+        es: `Esta configuración incluye ${total} módulos y sirve para probar asientos, transiciones de forma, montaje rápido y adaptación a espacios pequeños.` ,
+        ua: `Ця конфігурація включає ${total} модулів і підходить для тестування сидіння, переходів форми, швидкого складання та адаптації до малих просторів.` ,
+        fr: `Cette configuration comprend ${total} modules et convient pour tester l’assise, les transitions de forme, le montage rapide et l’adaptation aux petits espaces.` ,
+        de: `Diese Konfiguration umfasst ${total} Module und eignet sich zum Testen von Sitzkomfort, Formübergängen, schneller Montage und Anpassung an kleine Räume.`
+      };
+
+      const labels = {
+        en: ['lounge seating', 'outdoor setup', 'mini workspace', 'art object', 'family play'],
+        es: ['asiento lounge', 'montaje exterior', 'mini workspace', 'objeto artístico', 'juego familiar'],
+        ua: ['лаунж-сидіння', 'вуличний сетап', 'міні-воркспейс', 'арт-об’єкт', 'сімейна гра'],
+        fr: ['assise lounge', 'setup extérieur', 'mini espace de travail', 'objet artistique', 'jeu familial'],
+        de: ['Lounge-Sitz', 'Outdoor-Setup', 'Mini-Workspace', 'Kunstobjekt', 'Familienspiel']
+      };
+
+      const enabled = [];
+      if (c >= 2) enabled.push(labels[lang][0]);
+      if (c + p >= 3) enabled.push(labels[lang][2]);
+      if (w >= 1 || y >= 2) enabled.push(labels[lang][3]);
+      if (total >= 5) enabled.push(labels[lang][4]);
+      if (p >= 1 || c >= 3) enabled.push(labels[lang][1]);
+      if (!enabled.length) enabled.push(lang === 'ua' ? 'ранній ескіз' : lang === 'es' ? 'boceto inicial' : lang === 'fr' ? 'esquisse initiale' : lang === 'de' ? 'frühe Skizze' : 'early sketch');
+
+      document.getElementById('summaryText').textContent = summary[lang];
+      document.getElementById('budgetText').textContent = `$${budget}`;
+      document.getElementById('weightText').textContent = `${weight} kg`;
+      document.getElementById('levelText').textContent = levelMap[lang][level];
+
+      const pills = document.getElementById('usePills');
+      pills.innerHTML = '';
+      enabled.slice(0,5).forEach((text, i) => {
+        const span = document.createElement('span');
+        span.className = 'pill' + (i === 0 && total < 4 ? ' warn' : '');
+        span.textContent = text;
+        pills.appendChild(span);
+      });
+    }
+
+    document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => { lang = btn.dataset.lang; applyLang(); }));
+    applyLang();
+  </script>
+</body>
+</html>
