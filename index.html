@@ -831,11 +831,15 @@
       }
     };
 
-    let lang = 'en';
+    const urlLang = new URLSearchParams(location.search).get('lang');
+    let lang = (urlLang && dict[urlLang]) ? urlLang : 'en';
     const t = (key) => (dict[lang] && dict[lang][key]) || dict.en[key] || key;
 
     function applyLang() {
-      document.documentElement.lang = lang === 'de' ? 'de' : lang === 'af' ? 'af' : lang;
+      const url = new URL(location);
+      if (lang === 'en') url.searchParams.delete('lang'); else url.searchParams.set('lang', lang);
+      history.replaceState(null, '', url);
+      document.documentElement.lang = lang;
       document.querySelectorAll('[data-i]').forEach(el => {
         const key = el.getAttribute('data-i');
         el.textContent = t(key);
