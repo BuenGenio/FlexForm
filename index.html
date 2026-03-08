@@ -65,6 +65,7 @@
     .lang-btn[data-lang="ua"] { --flag: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect fill='%230057B7' width='3' height='1'/%3E%3Crect fill='%23FFD700' y='1' width='3' height='1'/%3E%3C/svg%3E"); }
     .lang-btn[data-lang="fr"] { --flag: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect fill='%23002395' width='1' height='2'/%3E%3Crect fill='%23fff' x='1' width='1' height='2'/%3E%3Crect fill='%23ED2939' x='2' width='1' height='2'/%3E%3C/svg%3E"); }
     .lang-btn[data-lang="de"] { --flag: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 3'%3E%3Crect fill='%23000' width='5' height='1'/%3E%3Crect fill='%23D00' y='1' width='5' height='1'/%3E%3Crect fill='%23FFCE00' y='2' width='5' height='1'/%3E%3C/svg%3E"); }
+    .lang-btn[data-lang="af"] { --flag: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 4'%3E%3Crect fill='%23DE3831' width='6' height='2'/%3E%3Crect fill='%23002395' y='2' width='6' height='2'/%3E%3Cpath d='M0 0v4l3-2L0 0z' fill='%23007A4D'/%3E%3Cpath d='M0 .5v3l2.5-1.5L0 .5z' fill='%23FFB612'/%3E%3Cpath d='M0 1v2l2-1-2-1z' fill='%23000'/%3E%3Crect fill='%23007A4D' x='2.2' y='1.6' width='3.8' height='.8'/%3E%3C/svg%3E"); }
     .lang-btn {
       border: 1px solid var(--line); color: var(--text);
       padding: 8px 10px; border-radius: 999px; cursor: pointer; font-weight: 700; font-size: 12px;
@@ -224,6 +225,7 @@
         <button class="lang-btn" data-lang="ua">UA</button>
         <button class="lang-btn" data-lang="fr">FR</button>
         <button class="lang-btn" data-lang="de">DEU</button>
+        <button class="lang-btn" data-lang="af">AF</button>
       </div>
     </div>
   </div>
@@ -264,14 +266,6 @@
               <button class="hero-tab" data-tab="4" data-i="htab_art">Art</button>
               <button class="hero-tab" data-tab="5" data-i="htab_event">Event</button>
             </div>
-            <div class="hero-toggle">
-              <span class="toggle-label active-label" data-i="htoggle_draw">Drawing</span>
-              <label class="toggle-switch">
-                <input type="checkbox" id="heroViewToggle" />
-                <span class="toggle-slider"></span>
-              </label>
-              <span class="toggle-label" data-i="htoggle_photo">Photo</span>
-            </div>
           </div>
           <div class="hero-viewport">
             <img class="hero-tab-img active" data-draw="img/hero-draw-lounge.webp" data-photo="img/hero-photo-lounge.webp" src="img/hero-draw-lounge.webp" alt="Lounge seating arrangement" />
@@ -280,6 +274,14 @@
             <img class="hero-tab-img" data-draw="img/hero-draw-play.webp" data-photo="img/hero-photo-play.webp" src="img/hero-draw-play.webp" alt="Kids play zone" />
             <img class="hero-tab-img" data-draw="img/hero-draw-art.webp" data-photo="img/hero-photo-art.webp" src="img/hero-draw-art.webp" alt="Art installation" />
             <img class="hero-tab-img" data-draw="img/hero-draw-event.webp" data-photo="img/hero-photo-event.webp" src="img/hero-draw-event.webp" alt="Event booth" />
+          </div>
+          <div class="hero-toggle">
+            <span class="toggle-label active-label" data-i="htoggle_draw">Drawing</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="heroViewToggle" />
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="toggle-label" data-i="htoggle_photo">Photo</span>
           </div>
         </div>
       </div>
@@ -541,6 +543,7 @@
           <span class="tag">UA</span>
           <span class="tag">FR</span>
           <span class="tag">DEU</span>
+          <span class="tag">AF</span>
         </div>
       </div>
     </div>
@@ -778,6 +781,53 @@
         htab_lounge: 'Lounge-Sitz', htab_outdoor: 'Outdoor', htab_workspace: 'Arbeitsplatz', htab_play: 'Spielzone', htab_art: 'Kunst', htab_event: 'Event',
         htoggle_draw: 'Zeichnung', htoggle_photo: 'Foto',
         footer_title: 'FlexForm Konzeptseite', footer_desc: 'Mehrsprachige Konzept-Website in einer Datei für Produktdefinition, Prototyping und frühe Planung.'
+      },
+      af: {
+        nav_overview: 'Oorsig', nav_system: 'Stelsel', nav_prototype: 'Prototipe', nav_roadmap: 'Padkaart', nav_faq: 'V&A',
+        eyebrow: 'Konsep \u2022 Produk \u2022 Prototipe',
+        hero_title: '\u2019n Modul\u00eare opblaasbare vormstelsel vir binnenshuise, buitenshuis, kuns en aanpasbare leef.',
+        hero_lead: 'FlexForm kombineer sagte opblaasbare geometrie, tasbare artistieke oppervlaktes en koppelbare verbindingspunte in \u2019n kompakte stel wat sitplekke, beeldhoukundige installasies, opspring-werkruimtes, speelobjekte, geleentheidsargitektuur of tydelike skuilings kan word.',
+        btn_prototype: 'Verken prototipe', btn_plan: 'Bekyk ontwikkelingsplan',
+        metric1_label: 'Kernmodules', metric2_label: 'Draagbare steldoel', metric3_label: 'Prototipe-begroting',
+        sec_value_title: 'Wat die produk is', sec_value_desc: '\u2019n Sagte, draagbare, herkonfigureerbare objekstelsel gebou uit gestandaardiseerde opblaasbare vorms. Dit is ontwerp as beide \u2019n praktiese produkplatform en \u2019n artistieke vormtaal.',
+        value1_title: 'Binnenshuise gebruik', value1_desc: 'Sitkamersitplekke, vloerstelsels, buigsame lessenaars, leeshoekies, gesinsspeelsones en kompakte werkruimte-uitlegte.',
+        value2_title: 'Buitenshuise gebruik', value2_desc: 'Tydelike sitplekke, vanlife-modules, feesinstallasies, glamping-meubels, beskadude sosiale areas en liggewig mobiele opstellings.',
+        value3_title: 'Artistieke gebruik', value3_desc: 'Interaktiewe beeldhouwerk, galery-objekte, modul\u00eare skenografie, tasbare omgewings, handelsmerkgeleentheidsruimtes en speelse installasies.',
+        sec_system_title: 'Stelselontleding', sec_system_desc: 'Die produk moet as \u2019n geometriese grammatika ontwikkel word, nie as \u2019n enkele voorwerp nie. Dit maak die platform uitbreibaar, vervaardigbaar en kommersieel veelsydig.',
+        shape_title: 'Basisvorms', shape_desc: 'Kubus, silinder, wig, plat paneel, sfeer en halfkoepel. Hulle dek sitplekke, ondersteuning, oppervlaktes, oorgange en dekoratiewe volume.',
+        dock_title: 'Koppelmetodes', dock_desc: 'Magnetiese belyning, bandlusse, harde klikverbindings en opsionele rielgebaseerde strukturele hegting vir groter installasies.',
+        materials_title: 'Materiale', materials_desc: 'TPU-gelamineerde stof, PVC-seil, ripstop-nylon en drop-stitch-panele na gelang van sagtheid, styfheid, duursaamheid en teikenmark.',
+        surface_title: 'Oppervlakidentiteit', surface_desc: 'Mat monochroom, deursigtige velle, gedrukte grafika, gloei-elemente, gestikte teksture of ge\u00efntegreerde beligting vir premium-uitgawes.',
+        sec_modules_title: 'Aanbevole eerste prototipe-stel', sec_modules_desc: 'Begin klein. \u2019n Toetsstel van 6\u20138 modules is genoeg om gemak, monteringslogika, verbindingsterkte en ruimtelike veelsydigheid te evalueer.',
+        mod1_name: 'Kubus', mod1_qty: '2\u20134 eenhede', mod1_use: 'Sitplek, basisblok, bytafel en stapelbare strukturele module.',
+        mod2_name: 'Silinder', mod2_qty: '2 eenhede', mod2_use: 'Ondersteuningselement, armleuning, visuele verbinder of pootplaasvervanger.',
+        mod3_name: 'Wig', mod3_qty: '1\u20132 eenhede', mod3_use: 'Rugleuning, helling, leunhoek en vormoorgang.',
+        mod4_name: 'Plat paneel', mod4_qty: '1\u20132 eenhede', mod4_use: 'Lessenaarbladsy, vloerbrug, bankoppervlak of vertoonplatform.',
+        sec_proto_title: 'Interaktiewe prototipe-beramer', sec_proto_desc: 'Pas die aantal modules aan om \u2019n klein persoonlike stelsel te skets. Die beramer som waarskynlike gebruiksgevalle, draagbaarheid en prototipe-skaal op.',
+        ctl_cube: 'Kubusmodules', ctl_cyl: 'Silindermodules', ctl_wedge: 'Wigmodules', ctl_panel: 'Paneelmodules',
+        out_title: 'Prototipe-opsomming', out_budget: 'Geskatte DIY-begroting:', out_weight: 'Draagbare stelgewig:', out_level: 'Prototipe-volwassenheid:',
+        sec_materials_title: 'Materiaal- en konstruksiestrategie', sec_materials_desc: 'Kies materiale gebaseer op die balans tussen sagtheid, styfheid, weerstandigheid, vervaardigingsgemak en prys.',
+        mat1: 'Beste vir premium sagte aanraking, lugdigte prestasie en skoner estetiese afwerkings.',
+        mat2: 'Laer koste en duursaam, geskik vir robuuste buitenshuise prototipes en vroe\u00eb vervaardigingstoetse.',
+        mat3: 'Nuttig waar \u2019n platter, stywer opgeblase oppervlak nodig is, veral panele en lessenaars.',
+        mat4_title: 'Verbindings', mat4: 'Begin met lusse, Velcro-bande, ingebedde magnete en 3D-gedrukte PETG-harde koppelings op versterkte kolle.',
+        sec_roadmap_title: 'Produkontwikkelingspadkaart', sec_roadmap_desc: 'Die vinnigste pad is om eers geometrie en verbindings te valideer, dan te ontwikkel na vervaardiging, produkfamilies en handelsmerkidentiteit.',
+        step1_title: 'Definieer geometriestandaard', step1_desc: 'Finaliseer afmetings, verbindingsones, klepplasing en stapellogika vir die eerste 4 moduletipes.',
+        step2_title: 'Bou growwe prototipes', step2_desc: 'Toets lugretensie, tasbare gevoel, naatduursaamheid en of modules stabiel bly tydens werklike gebruik.',
+        step3_title: 'Loods gebruikscenarios', step3_desc: 'Valideer tuissitkamer, buitenshuise stel, geleentheidsinstallasie en kinder-/gesinsgebruik as aparte produkrigings.',
+        step4_title: 'Kleingroepproduksie', step4_desc: 'Beweeg na verbeterde materiale, handelsmerkvelletjies, verpakking en \u2019n premium visuele identiteit vir lanseerklaar eenhede.',
+        sec_business_title: 'Kommersi\u00eble posisionering', sec_business_desc: 'Hierdie konsep kan \u2019n produkfamilie word eerder as \u2019n enkele SKU, wat markbereik en langtermyn-handelsmerkwaarde verbeter.',
+        biz1_title: 'Tuiskreatiewe stel', biz1_desc: 'Gesinsinterieurs, speelse sitkamerruimtes, kompakte sitplekke en visuele ontwerpbykomstighede.',
+        biz2_title: 'Geleentheid-/galerystel', biz2_desc: 'Installasies, handelsgemerk-opspring, uitstallings, verhoogobjekte en interaktiewe beeldhoukundige omgewings.',
+        biz3_title: 'Buitenshuise / vanlife-stel', biz3_desc: 'Draagbare gemakmodules, aanpasbare werkruimte-elemente, kampmeubels en tydelike sosiale sones.',
+        sec_faq_title: 'Sleutelvrae om tydens prototipering te beantwoord', sec_faq_desc: 'Die beste vroe\u00ebstadium-prototipe is die een wat onthul wat misluk, wat mense be\u00efndruk en wat standaardisering verdien.',
+        faq1_q: 'Hoe styf moet die modules voel?', faq1_a: 'Sag genoeg om uitnodigend te voel, maar stabiel genoeg om op te sit, te stapel en te koppel sonder om in onbruikbare vorms te verval.',
+        faq2_q: 'Watter verbinding moet eerste kom?', faq2_a: 'Bande en lusse is die vinnigste prototipe-pad. Magnete verbeter gebruiksgemak. Harde klikverbindings word waardevol sodra geometrie vasgestel is.',
+        faq3_q: 'Wat is die eerste kommersi\u00eble storie?', faq3_a: '\u2019n Kompakte persoonlike kreatiewe stel is die mees verstaanbare lanseerproduk, met geleentheid- en galery-uitgawes daarna.',
+        faq4_q: 'Wat maak dit verdedigbaar?', faq4_a: '\u2019n Herkenbare geometriestelsel, kenmerkende verbindingslogika, handelsmerk-materiaalafwerkings en \u2019n duidelike visuele identiteit oor alle gebruiksgevalle.',
+        htab_lounge: 'Sitplek', htab_outdoor: 'Buitenshuis', htab_workspace: 'Werkruimte', htab_play: 'Speelsone', htab_art: 'Kuns', htab_event: 'Geleentheid',
+        htoggle_draw: 'Tekening', htoggle_photo: 'Foto',
+        footer_title: 'FlexForm-konsepbladsy', footer_desc: 'Eenl\u00eaer-meertalige konsepwebwerf vir produkdefinisie, prototipering en vroe\u00ebstadium-beplanning.'
       }
     };
 
@@ -785,7 +835,7 @@
     const t = (key) => (dict[lang] && dict[lang][key]) || dict.en[key] || key;
 
     function applyLang() {
-      document.documentElement.lang = lang === 'de' ? 'de' : lang;
+      document.documentElement.lang = lang === 'de' ? 'de' : lang === 'af' ? 'af' : lang;
       document.querySelectorAll('[data-i]').forEach(el => {
         const key = el.getAttribute('data-i');
         el.textContent = t(key);
@@ -820,7 +870,8 @@
         es: { 'micro concept':'micro concepto', 'functional prototype':'prototipo funcional', 'experience kit':'kit experiencial', 'pilot collection':'colección piloto' },
         ua: { 'micro concept':'мікроконцепт', 'functional prototype':'функціональний прототип', 'experience kit':'дослідний набір', 'pilot collection':'пілотна колекція' },
         fr: { 'micro concept':'micro concept', 'functional prototype':'prototype fonctionnel', 'experience kit':'kit expérientiel', 'pilot collection':'collection pilote' },
-        de: { 'micro concept':'Mikrokonzept', 'functional prototype':'funktionsfähiger Prototyp', 'experience kit':'Erlebnis-Kit', 'pilot collection':'Pilotkollektion' }
+        de: { 'micro concept':'Mikrokonzept', 'functional prototype':'funktionsfähiger Prototyp', 'experience kit':'Erlebnis-Kit', 'pilot collection':'Pilotkollektion' },
+        af: { 'micro concept':'mikrokonsep', 'functional prototype':'funksionele prototipe', 'experience kit':'ervaringstel', 'pilot collection':'loodskolleksie' }
       };
 
       const summary = {
@@ -828,7 +879,8 @@
         es: `Esta configuración incluye ${total} módulos y sirve para probar asientos, transiciones de forma, montaje rápido y adaptación a espacios pequeños.` ,
         ua: `Ця конфігурація включає ${total} модулів і підходить для тестування сидіння, переходів форми, швидкого складання та адаптації до малих просторів.` ,
         fr: `Cette configuration comprend ${total} modules et convient pour tester l’assise, les transitions de forme, le montage rapide et l’adaptation aux petits espaces.` ,
-        de: `Diese Konfiguration umfasst ${total} Module und eignet sich zum Testen von Sitzkomfort, Formübergängen, schneller Montage und Anpassung an kleine Räume.`
+        de: `Diese Konfiguration umfasst ${total} Module und eignet sich zum Testen von Sitzkomfort, Formübergängen, schneller Montage und Anpassung an kleine Räume.` ,
+        af: `Hierdie konfigurasie sluit ${total} modules in en is geskik vir die toets van sitplekke, vormoorgange, vinnige montering en kleinruimte-aanpassing.`
       };
 
       const labels = {
@@ -836,7 +888,8 @@
         es: ['asiento lounge', 'montaje exterior', 'mini workspace', 'objeto artístico', 'juego familiar'],
         ua: ['лаунж-сидіння', 'вуличний сетап', 'міні-воркспейс', 'арт-об’єкт', 'сімейна гра'],
         fr: ['assise lounge', 'setup extérieur', 'mini espace de travail', 'objet artistique', 'jeu familial'],
-        de: ['Lounge-Sitz', 'Outdoor-Setup', 'Mini-Workspace', 'Kunstobjekt', 'Familienspiel']
+        de: ['Lounge-Sitz', 'Outdoor-Setup', 'Mini-Workspace', 'Kunstobjekt', 'Familienspiel'],
+        af: ['sitpleksitplek', 'buitenshuise opstelling', 'mini-werkruimte', 'kunsobjek', 'gesinsspel']
       };
 
       const enabled = [];
@@ -845,7 +898,7 @@
       if (w >= 1 || y >= 2) enabled.push(labels[lang][3]);
       if (total >= 5) enabled.push(labels[lang][4]);
       if (p >= 1 || c >= 3) enabled.push(labels[lang][1]);
-      if (!enabled.length) enabled.push(lang === 'ua' ? 'ранній ескіз' : lang === 'es' ? 'boceto inicial' : lang === 'fr' ? 'esquisse initiale' : lang === 'de' ? 'frühe Skizze' : 'early sketch');
+      if (!enabled.length) enabled.push(lang === 'ua' ? 'ранній ескіз' : lang === 'es' ? 'boceto inicial' : lang === 'fr' ? 'esquisse initiale' : lang === 'de' ? 'frühe Skizze' : lang === 'af' ? 'vroeë skets' : 'early sketch');
 
       document.getElementById('summaryText').textContent = summary[lang];
       document.getElementById('budgetText').textContent = `$${budget}`;
