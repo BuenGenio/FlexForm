@@ -94,35 +94,6 @@
     .btn.primary { background: linear-gradient(135deg, rgba(125,211,252,.18), rgba(192,132,252,.18)); border-color: rgba(125,211,252,.35); }
     .btn.secondary { background: rgba(255,255,255,.04); color: var(--text); }
     .hero-visual { padding: 22px; display:flex; flex-direction: column; justify-content: center; min-height: 420px; }
-    .scene {
-      position: relative; height: 100%; min-height: 350px; border-radius: 20px; overflow: hidden;
-      background:
-        radial-gradient(circle at 50% 20%, rgba(125,211,252,.16), transparent 35%),
-        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-      border:1px solid rgba(255,255,255,.08);
-    }
-    .shape {
-      position:absolute; backdrop-filter: blur(10px);
-      background: linear-gradient(180deg, rgba(255,255,255,.26), rgba(255,255,255,.08));
-      border:1px solid rgba(255,255,255,.2);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 16px 40px rgba(0,0,0,.25);
-    }
-    .cube { width: 140px; height: 140px; border-radius: 28px; left: 56px; bottom: 58px; }
-    .wedge {
-      width: 180px; height: 120px; right: 46px; bottom: 52px; border-radius: 30px;
-      clip-path: polygon(0 100%, 100% 100%, 100% 25%, 0 70%);
-    }
-    .cyl { width: 90px; height: 160px; border-radius: 999px; left: 220px; bottom: 58px; }
-    .panel { width: 210px; height: 38px; border-radius: 20px; left: 114px; bottom: 28px; }
-    .sphere { width: 104px; height: 104px; border-radius: 50%; right: 128px; top: 56px; }
-    .dock {
-      position:absolute; width: 16px; height: 16px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      box-shadow: 0 0 0 4px rgba(125,211,252,.12), 0 10px 26px rgba(125,211,252,.4);
-    }
-    .dock.d1 { left: 188px; bottom: 112px; }
-    .dock.d2 { left: 314px; bottom: 68px; }
-    .dock.d3 { right: 190px; bottom: 118px; }
     .metrics { display:grid; grid-template-columns: repeat(3,1fr); gap:12px; margin-top:18px; }
     .metric { padding: 14px; border-radius: 18px; background: rgba(255,255,255,.05); border:1px solid var(--line); }
     .metric b { display:block; font-size: 22px; }
@@ -135,7 +106,9 @@
     .icon { font-size: 28px; margin-bottom: 10px; }
     .muted { color: var(--muted); }
     .tableish { display:grid; gap:10px; }
-    .row { display:grid; grid-template-columns: 1.1fr .7fr 1.2fr; gap:10px; }
+    .row { display:grid; grid-template-columns: 120px 1.1fr .7fr 1.2fr; gap:10px; align-items:center; }
+    .mod-img { padding:8px; display:flex; align-items:center; justify-content:center; }
+    .mod-img img { width:100%; max-width:104px; border-radius:14px; object-fit:cover; aspect-ratio:16/10; }
     .cell {
       padding: 14px 16px; border:1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,.04);
     }
@@ -165,6 +138,41 @@
     footer { padding: 28px 0 56px; color: var(--muted); }
     .footerbox { padding: 22px; display:flex; justify-content:space-between; gap:18px; align-items:center; flex-wrap:wrap; }
     .tag { display:inline-flex; padding:6px 10px; border-radius:999px; background: rgba(255,255,255,.05); border:1px solid var(--line); font-size: 12px; }
+    .hero-tabs { display:flex; flex-direction:column; height:100%; }
+    .hero-tab-bar { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+    .hero-tab {
+      padding:7px 13px; border-radius:12px; border:1px solid var(--line);
+      background:rgba(255,255,255,.04); color:var(--muted); cursor:pointer;
+      font-size:12px; font-weight:700; transition:all .2s;
+    }
+    .hero-tab.active { background:linear-gradient(135deg,rgba(125,211,252,.18),rgba(192,132,252,.18)); border-color:rgba(125,211,252,.45); color:var(--text); }
+    .hero-tab:hover:not(.active) { background:rgba(255,255,255,.08); color:var(--text); }
+    .hero-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+    .hero-toggle { display:flex; align-items:center; gap:8px; font-size:12px; font-weight:700; color:var(--muted); }
+    .hero-toggle .active-label { color:var(--accent); }
+    .toggle-switch { position:relative; width:40px; height:22px; flex-shrink:0; }
+    .toggle-switch input { opacity:0; width:0; height:0; }
+    .toggle-slider {
+      position:absolute; inset:0; border-radius:999px; cursor:pointer; transition:.25s;
+      background:rgba(125,211,252,.22); border:1px solid rgba(125,211,252,.35);
+    }
+    .toggle-slider:before {
+      content:""; position:absolute; left:2px; top:2px; width:16px; height:16px;
+      border-radius:50%; background:var(--accent); transition:.25s;
+    }
+    .toggle-switch input:checked + .toggle-slider:before { transform:translateX(18px); }
+    .toggle-switch input:checked + .toggle-slider { background:rgba(192,132,252,.22); border-color:rgba(192,132,252,.45); }
+    .hero-viewport {
+      flex:1; position:relative; border-radius:16px; overflow:hidden; min-height:280px;
+      background:radial-gradient(circle at 50% 20%,rgba(125,211,252,.12),transparent 40%),
+        linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .hero-viewport img {
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+      border-radius:16px; opacity:0; transition:opacity .4s ease;
+    }
+    .hero-viewport img.active { opacity:1; }
     @media (max-width: 1080px) {
       .hero, .proto { grid-template-columns: 1fr; }
       .grid-4 { grid-template-columns: repeat(2,1fr); }
@@ -173,14 +181,14 @@
     @media (max-width: 760px) {
       .nav { align-items:flex-start; flex-direction:column; }
       .hero-copy, .hero-visual, .tile, .controls, .output, .step { padding: 18px; }
-      .grid-3, .grid-4, .roadmap, .row, .metrics { grid-template-columns: 1fr; }
+      .grid-3, .grid-4, .roadmap, .metrics { grid-template-columns: 1fr; }
+      .row { grid-template-columns: 80px 1fr; }
+      .row .cell:nth-child(3), .row .cell:nth-child(4) { grid-column: span 1; }
       .section-head { flex-direction: column; align-items: start; }
       .navlinks { gap: 10px; font-size: 13px; }
-      .scene { min-height: 300px; }
-      .cube { width: 110px; height: 110px; left: 26px; }
-      .cyl { left: 146px; width: 70px; height: 124px; }
-      .panel { left: 60px; width: 180px; }
-      .wedge { width: 145px; right: 24px; }
+      .hero-tab-bar { gap:4px; }
+      .hero-tab { padding:6px 10px; font-size:11px; }
+      .hero-viewport { min-height: 220px; }
     }
   </style>
 </head>
@@ -237,15 +245,33 @@
         </div>
       </div>
       <div class="card hero-visual">
-        <div class="scene" aria-hidden="true">
-          <div class="shape sphere"></div>
-          <div class="shape cube"></div>
-          <div class="shape cyl"></div>
-          <div class="shape panel"></div>
-          <div class="shape wedge"></div>
-          <div class="dock d1"></div>
-          <div class="dock d2"></div>
-          <div class="dock d3"></div>
+        <div class="hero-tabs">
+          <div class="hero-controls">
+            <div class="hero-tab-bar">
+              <button class="hero-tab active" data-tab="0" data-i="htab_lounge">Lounge Seat</button>
+              <button class="hero-tab" data-tab="1" data-i="htab_outdoor">Outdoor</button>
+              <button class="hero-tab" data-tab="2" data-i="htab_workspace">Workspace</button>
+              <button class="hero-tab" data-tab="3" data-i="htab_play">Play Zone</button>
+              <button class="hero-tab" data-tab="4" data-i="htab_art">Art</button>
+              <button class="hero-tab" data-tab="5" data-i="htab_event">Event</button>
+            </div>
+            <div class="hero-toggle">
+              <span class="toggle-label active-label" data-i="htoggle_draw">Drawing</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="heroViewToggle" />
+                <span class="toggle-slider"></span>
+              </label>
+              <span class="toggle-label" data-i="htoggle_photo">Photo</span>
+            </div>
+          </div>
+          <div class="hero-viewport">
+            <img class="hero-tab-img active" data-draw="img/hero-draw-lounge.png" data-photo="img/hero-photo-lounge.png" src="img/hero-draw-lounge.png" alt="Lounge seating arrangement" />
+            <img class="hero-tab-img" data-draw="img/hero-draw-outdoor.png" data-photo="img/hero-photo-outdoor.png" src="img/hero-draw-outdoor.png" alt="Outdoor camping setup" />
+            <img class="hero-tab-img" data-draw="img/hero-draw-workspace.png" data-photo="img/hero-photo-workspace.png" src="img/hero-draw-workspace.png" alt="Pop-up workspace" />
+            <img class="hero-tab-img" data-draw="img/hero-draw-play.png" data-photo="img/hero-photo-play.png" src="img/hero-draw-play.png" alt="Kids play zone" />
+            <img class="hero-tab-img" data-draw="img/hero-draw-art.png" data-photo="img/hero-photo-art.png" src="img/hero-draw-art.png" alt="Art installation" />
+            <img class="hero-tab-img" data-draw="img/hero-draw-event.png" data-photo="img/hero-photo-event.png" src="img/hero-draw-event.png" alt="Event booth" />
+          </div>
         </div>
       </div>
     </section>
@@ -312,21 +338,25 @@
       </div>
       <div class="card tile tableish">
         <div class="row">
+          <div class="cell mod-img"><img src="img/block-cube.png" alt="Cube module" loading="lazy" /></div>
           <div class="cell"><strong data-i="mod1_name">Cube</strong><br><span class="muted">60 × 60 × 60 cm</span></div>
           <div class="cell"><strong data-i="mod1_qty">2–4 units</strong></div>
           <div class="cell"><span data-i="mod1_use">Seat, base block, side table, stackable structural module.</span></div>
         </div>
         <div class="row">
+          <div class="cell mod-img"><img src="img/block-cylinder.png" alt="Cylinder module" loading="lazy" /></div>
           <div class="cell"><strong data-i="mod2_name">Cylinder</strong><br><span class="muted">60 × Ø30 cm</span></div>
           <div class="cell"><strong data-i="mod2_qty">2 units</strong></div>
           <div class="cell"><span data-i="mod2_use">Support element, armrest, visual connector, leg substitute.</span></div>
         </div>
         <div class="row">
+          <div class="cell mod-img"><img src="img/block-wedge.png" alt="Wedge module" loading="lazy" /></div>
           <div class="cell"><strong data-i="mod3_name">Wedge</strong><br><span class="muted">60 × 60 × 30 cm</span></div>
           <div class="cell"><strong data-i="mod3_qty">1–2 units</strong></div>
           <div class="cell"><span data-i="mod3_use">Backrest, ramp, recline angle, form transition.</span></div>
         </div>
         <div class="row">
+          <div class="cell mod-img"><img src="img/block-panel.png" alt="Flat panel module" loading="lazy" /></div>
           <div class="cell"><strong data-i="mod4_name">Flat panel</strong><br><span class="muted">120 × 60 × 10 cm</span></div>
           <div class="cell"><strong data-i="mod4_qty">1–2 units</strong></div>
           <div class="cell"><span data-i="mod4_use">Desk top, floor bridge, bench surface, display platform.</span></div>
@@ -552,6 +582,8 @@
         faq2_q: 'Which connector should come first?', faq2_a: 'Straps and loops are the fastest prototype path. Magnets improve ease of use. Hard click docks become valuable once geometry is fixed.',
         faq3_q: 'What is the first commercial story?', faq3_a: 'A compact personal creative kit is the most understandable launch product, with event and gallery editions following later.',
         faq4_q: 'What makes this defensible?', faq4_a: 'A recognizable geometry system, signature connector logic, branded material finishes, and a clear visual identity across use cases.',
+        htab_lounge: 'Lounge Seat', htab_outdoor: 'Outdoor', htab_workspace: 'Workspace', htab_play: 'Play Zone', htab_art: 'Art', htab_event: 'Event',
+        htoggle_draw: 'Drawing', htoggle_photo: 'Photo',
         footer_title: 'FlexForm concept page', footer_desc: 'Single-file multilingual concept website for product definition, prototyping, and early-stage planning.'
       },
       es: {
@@ -596,6 +628,8 @@
         faq2_q: '¿Qué conector debe venir primero?', faq2_a: 'Correas y bucles son la vía más rápida. Los imanes mejoran la facilidad de uso. Los clics rígidos aportan valor cuando la geometría ya está fijada.',
         faq3_q: '¿Cuál es la primera historia comercial?', faq3_a: 'Un kit creativo personal y compacto es el producto de lanzamiento más comprensible, seguido por ediciones para eventos y galerías.',
         faq4_q: '¿Qué hace esto defendible?', faq4_a: 'Un sistema geométrico reconocible, lógica de conexión distintiva, acabados de material propios e identidad visual clara en todos los usos.',
+        htab_lounge: 'Asiento Lounge', htab_outdoor: 'Exterior', htab_workspace: 'Espacio trabajo', htab_play: 'Zona de juego', htab_art: 'Arte', htab_event: 'Evento',
+        htoggle_draw: 'Dibujo', htoggle_photo: 'Foto',
         footer_title: 'Página conceptual FlexForm', footer_desc: 'Sitio conceptual multilingüe de un solo archivo para definición de producto, prototipado y planificación inicial.'
       },
       ua: {
@@ -640,6 +674,8 @@
         faq2_q: 'Який конектор запускати першим?', faq2_a: 'Петлі та ремені — найшвидший шлях. Магніти покращують зручність. Жорсткі click-конектори стають цінними після фіксації геометрії.',
         faq3_q: 'Яка перша комерційна історія?', faq3_a: 'Компактний персональний творчий набір — найзрозуміліший стартовий продукт, а далі можна додати версії для подій і галерей.',
         faq4_q: 'Що робить продукт захищеним?', faq4_a: 'Впізнавана геометрична система, власна логіка стикування, брендовані матеріальні фініші та чітка візуальна айдентика.',
+        htab_lounge: 'Лаунж-сидіння', htab_outdoor: 'Вулиця', htab_workspace: 'Робоче місце', htab_play: 'Ігрова зона', htab_art: 'Мистецтво', htab_event: 'Подія',
+        htoggle_draw: 'Малюнок', htoggle_photo: 'Фото',
         footer_title: 'Концепт-сторінка FlexForm', footer_desc: 'Однофайловий багатомовний концепт-сайт для визначення продукту, прототипування та раннього планування.'
       },
       fr: {
@@ -684,6 +720,8 @@
         faq2_q: 'Quel connecteur lancer en premier ?', faq2_a: 'Les sangles et boucles sont la voie la plus rapide. Les aimants améliorent l’usage. Les clics rigides deviennent pertinents une fois la géométrie figée.',
         faq3_q: 'Quelle première histoire commerciale ?', faq3_a: 'Un kit créatif personnel compact est le produit de lancement le plus compréhensible, suivi d’éditions événementielles et galerie.',
         faq4_q: 'Qu’est-ce qui rend cela défendable ?', faq4_a: 'Un système géométrique identifiable, une logique de connexion signature, des finitions matières distinctives et une identité visuelle claire.',
+        htab_lounge: 'Assise lounge', htab_outdoor: 'Extérieur', htab_workspace: 'Espace travail', htab_play: 'Zone de jeu', htab_art: 'Art', htab_event: 'Événement',
+        htoggle_draw: 'Dessin', htoggle_photo: 'Photo',
         footer_title: 'Page concept FlexForm', footer_desc: 'Site concept multilingue en un seul fichier pour définition produit, prototypage et planification initiale.'
       },
       de: {
@@ -728,6 +766,8 @@
         faq2_q: 'Welcher Verbinder zuerst?', faq2_a: 'Gurte und Schlaufen sind der schnellste Prototyp-Weg. Magnete verbessern die Bedienung. Harte Klickverbinder lohnen sich, sobald die Geometrie fixiert ist.',
         faq3_q: 'Was ist die erste kommerzielle Story?', faq3_a: 'Ein kompaktes persönliches Creative-Kit ist das verständlichste Launch-Produkt, gefolgt von Event- und Galerie-Editionen.',
         faq4_q: 'Was macht das verteidigbar?', faq4_a: 'Ein wiedererkennbares Geometriesystem, eine charakteristische Verbindungslogik, markante Materialoberflächen und eine klare visuelle Identität.',
+        htab_lounge: 'Lounge-Sitz', htab_outdoor: 'Outdoor', htab_workspace: 'Arbeitsplatz', htab_play: 'Spielzone', htab_art: 'Kunst', htab_event: 'Event',
+        htoggle_draw: 'Zeichnung', htoggle_photo: 'Foto',
         footer_title: 'FlexForm Konzeptseite', footer_desc: 'Mehrsprachige Konzept-Website in einer Datei für Produktdefinition, Prototyping und frühe Planung.'
       }
     };
@@ -814,6 +854,27 @@
     }
 
     document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => { lang = btn.dataset.lang; applyLang(); }));
+
+    const heroTabs = document.querySelectorAll('.hero-tab');
+    const heroImgs = document.querySelectorAll('.hero-tab-img');
+    const heroToggle = document.getElementById('heroViewToggle');
+    const toggleLabels = document.querySelectorAll('.toggle-label');
+
+    function setHeroTab(idx) {
+      heroTabs.forEach(t => t.classList.toggle('active', +t.dataset.tab === idx));
+      heroImgs.forEach((img, i) => img.classList.toggle('active', i === idx));
+    }
+
+    function setHeroView(isPhoto) {
+      const attr = isPhoto ? 'data-photo' : 'data-draw';
+      heroImgs.forEach(img => { img.src = img.getAttribute(attr); });
+      toggleLabels[0].classList.toggle('active-label', !isPhoto);
+      toggleLabels[1].classList.toggle('active-label', isPhoto);
+    }
+
+    heroTabs.forEach(tab => tab.addEventListener('click', () => setHeroTab(+tab.dataset.tab)));
+    heroToggle.addEventListener('change', () => setHeroView(heroToggle.checked));
+
     applyLang();
   </script>
 </body>
