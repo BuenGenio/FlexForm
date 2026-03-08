@@ -60,11 +60,20 @@
     .logo:after { inset: 12px; transform: rotate(-18deg); }
     .navlinks { display:flex; gap: 16px; flex-wrap: wrap; color: var(--muted); font-size: 14px; }
     .lang-switch { display:flex; gap:8px; flex-wrap: wrap; justify-content: flex-end; }
+    .lang-btn[data-lang="en"] { --flag: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 30'%3E%3Crect fill='%23012169' width='60' height='30'/%3E%3Cpath d='M0 0l60 30M60 0L0 30' stroke='%23fff' stroke-width='6'/%3E%3Cpath d='M0 0l60 30M60 0L0 30' stroke='%23C8102E' stroke-width='2'/%3E%3Cpath d='M30 0v30M0 15h60' stroke='%23fff' stroke-width='10'/%3E%3Cpath d='M30 0v30M0 15h60' stroke='%23C8102E' stroke-width='6'/%3E%3C/svg%3E"); }
+    .lang-btn[data-lang="es"] { --flag: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect fill='%23AA151B' width='3' height='2'/%3E%3Crect fill='%23F1BF00' y='.5' width='3' height='1'/%3E%3C/svg%3E"); }
+    .lang-btn[data-lang="ua"] { --flag: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect fill='%230057B7' width='3' height='1'/%3E%3Crect fill='%23FFD700' y='1' width='3' height='1'/%3E%3C/svg%3E"); }
+    .lang-btn[data-lang="fr"] { --flag: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect fill='%23002395' width='1' height='2'/%3E%3Crect fill='%23fff' x='1' width='1' height='2'/%3E%3Crect fill='%23ED2939' x='2' width='1' height='2'/%3E%3C/svg%3E"); }
+    .lang-btn[data-lang="de"] { --flag: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 3'%3E%3Crect fill='%23000' width='5' height='1'/%3E%3Crect fill='%23D00' y='1' width='5' height='1'/%3E%3Crect fill='%23FFCE00' y='2' width='5' height='1'/%3E%3C/svg%3E"); }
     .lang-btn {
-      border: 1px solid var(--line); background: rgba(255,255,255,.05); color: var(--text);
+      border: 1px solid var(--line); color: var(--text);
       padding: 8px 10px; border-radius: 999px; cursor: pointer; font-weight: 700; font-size: 12px;
+      background: linear-gradient(rgba(9,17,31,.6),rgba(9,17,31,.6)), var(--flag, linear-gradient(rgba(255,255,255,.05),rgba(255,255,255,.05))) center/cover no-repeat;
     }
-    .lang-btn.active { background: linear-gradient(135deg, rgba(125,211,252,.22), rgba(192,132,252,.24)); border-color: rgba(125,211,252,.45); }
+    .lang-btn.active {
+      background: linear-gradient(135deg, rgba(125,211,252,.18),rgba(192,132,252,.2)), var(--flag, linear-gradient(rgba(125,211,252,.22),rgba(192,132,252,.24))) center/cover no-repeat;
+      border-color: rgba(125,211,252,.45);
+    }
     .hero {
       padding: 52px 0 22px;
       display: grid; grid-template-columns: 1.12fr .88fr; gap: 24px; align-items: stretch;
